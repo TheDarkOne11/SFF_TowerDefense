@@ -2,7 +2,6 @@ package core;
 
 import handlers.KeyHandler;
 import handlers.MouseHandler;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,14 +10,10 @@ import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-
 import enemies.EnemyMove;
-
 import level.Level;
 import level.LevelFile;
-
 import towers.Tower;
-
 import additional_programs.LevelMaker;
 
 //TODO Epizoda 16
