@@ -2,22 +2,24 @@ package core;
 
 import handlers.KeyHandler;
 import handlers.MouseHandler;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import enemies.Enemy;
-import enemies.EnemyMove;
-import enemies.Wave;
 import level.Level;
 import level.LevelFile;
 import towers.Tower;
 import additional_programs.LevelMaker;
+import enemies.Enemy;
+import enemies.EnemyMove;
+import enemies.Wave;
 
 //TODO Epizoda 16
 
@@ -91,11 +93,9 @@ public class Screen extends JPanel implements Runnable {
 			int gapY = 125;
 			
 			/** Velikost políèka X*/
-			int sizeX = (this.frame.getWidth() - gapX) / (1 + gridCountX);
+			Screen.gridWidth = (this.frame.getWidth() - gapX) / (1 + gridCountX);
 			/** Velikost políèka Y*/
-			int sizeY = (this.frame.getHeight() - gapY) / (1 + gridCountY);
-			Screen.gridWidth = sizeX;
-			Screen.gridHeight = sizeY;
+			Screen.gridHeight = (this.frame.getHeight() - gapY) / (1 + gridCountY);
 						
 			// Background
 			g.setColor(Color.GREEN);
@@ -105,8 +105,8 @@ public class Screen extends JPanel implements Runnable {
 			g.setColor(Color.black);
 			for(int x = 0; x < gridCountX; x++) {
 				for(int y = 0; y < gridCountY; y++) {
-					g.drawImage(terrain[map[x][y]], sizeX + (x*sizeX), sizeY + (y*sizeY), sizeX, sizeY, null);
-					g.drawRect(sizeX + (x*sizeX), sizeY + (y*sizeY), sizeX, sizeY);
+					g.drawImage(terrain[map[x][y]], Screen.gridWidth + (x*Screen.gridWidth), Screen.gridHeight + (y*Screen.gridHeight), Screen.gridWidth, Screen.gridHeight, null);
+					g.drawRect(Screen.gridWidth + (x*Screen.gridWidth), Screen.gridHeight + (y*Screen.gridHeight), Screen.gridWidth, Screen.gridHeight);
 				}
 			}
 			
@@ -121,23 +121,23 @@ public class Screen extends JPanel implements Runnable {
 			String health = "Health: " + user.player.health;
 			String money = "Money: " + user.player.money;
 			
-			g.drawRect(sizeX/2, this.frame.getHeight() - gapY + 5, sizeX*4, gapY/4);
-			g.drawString(health, sizeX*2 - health.length(), this.frame.getHeight() - gapY + 5 + gapY/6);
+			g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + 5, Screen.gridWidth*4, gapY/4);
+			g.drawString(health, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + 5 + gapY/6);
 			
-			g.drawRect(sizeX/2, this.frame.getHeight() - gapY + gapY/4 + 5, sizeX*4, gapY/4);
-			g.drawString(money, sizeX*2 - health.length(), this.frame.getHeight() - gapY + gapY/4 + 5 + gapY/6);
+			g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + gapY/4 + 5, Screen.gridWidth*4, gapY/4);
+			g.drawString(money, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + gapY/4 + 5 + gapY/6);
 			
-			g.drawRect(sizeX/2, this.frame.getHeight() - gapY + 2*gapY/4 + 5, sizeX*4, gapY/4);
-			g.drawString(money, sizeX*2 - health.length(), this.frame.getHeight() - gapY + 2*gapY/4 + 5 + gapY/6);
+			g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + 2*gapY/4 + 5, Screen.gridWidth*4, gapY/4);
+			g.drawString(money, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + 2*gapY/4 + 5 + gapY/6);
 			
 			// Tower scrool list num. 1
-			g.drawRect(sizeX/2 + sizeX*4 + + 5, this.frame.getHeight() - gapY + 5, sizeX, 3*gapY/4);
+			g.drawRect(Screen.gridWidth/2 + Screen.gridWidth*4 + + 5, this.frame.getHeight() - gapY + 5, Screen.gridWidth, 3*gapY/4);
 				// Tower scrool list num. 2
 			
 			// Tower list
 			int TLCountX = 20;
 			int TLCountY = 2;
-			int startX = sizeX/2 + sizeX*4 + sizeX + 10;
+			int startX = Screen.gridWidth/2 + Screen.gridWidth*4 + Screen.gridWidth + 10;
 			int startY = this.frame.getHeight() - gapY + 5;
 			this.shopGridStartX_Mouse = startX;
 			this.shopGridStartY_Mouse = startY;
@@ -148,19 +148,19 @@ public class Screen extends JPanel implements Runnable {
 				for(int y = 0; y < TLCountY; y++) {
 					if(Tower.towerList[x*TLCountY + y] != null) {
 						// Tower Image
-						g.drawImage(Tower.towerList[x*TLCountY + y].texture, startX + (x*sizeX), startY + (y*sizeY), (int) gridWidth, (int) gridHeight, null);
+						g.drawImage(Tower.towerList[x*TLCountY + y].texture, startX + (x*Screen.gridWidth), startY + (y*Screen.gridHeight), (int) gridWidth, (int) gridHeight, null);
 					
 						// Zašedne vìž, pokud na ní není dostatek penìz
 						if(Tower.towerList[x*TLCountY + y].cost > this.user.player.money) {
 							g.setColor(new Color(68, 0, 68, 100));
-							g.fillRect(startX + (x*sizeX), startY + (y*sizeY), (int) gridWidth, (int) gridHeight);
+							g.fillRect(startX + (x*Screen.gridWidth), startY + (y*Screen.gridHeight), (int) gridWidth, (int) gridHeight);
 						}
 					
 					}
 					
 					// Shop grid
 					g.setColor(Color.black);
-					g.drawRect(startX + (x*sizeX), startY + (y*sizeY), sizeX, sizeY);
+					g.drawRect(startX + (x*Screen.gridWidth), startY + (y*Screen.gridHeight), Screen.gridWidth, Screen.gridHeight);
 				}
 			}
 			
