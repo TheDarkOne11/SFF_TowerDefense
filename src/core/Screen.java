@@ -10,7 +10,10 @@ import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import enemies.Enemy;
 import enemies.EnemyMove;
+import enemies.Wave;
 import level.Level;
 import level.LevelFile;
 import towers.Tower;
@@ -29,8 +32,8 @@ public class Screen extends JPanel implements Runnable {
 	// Main Grid
 	public static int gridCountX = 25;	// 25
 	public static int gridCountY = 15;	// 15
-	public static double gridWidth = 1;
-	public static double gridHeight = 1;
+	public static int gridWidth = 1;
+	public static int gridHeight = 1;
 	
 	// Shop Grid
 	public int shopGridStartX_Mouse, shopGridStartY_Mouse, towerCountX_Mouse, towerCountY_Mouse;
@@ -59,6 +62,7 @@ public class Screen extends JPanel implements Runnable {
 		/** Kolik nepøátel na mapì je na mapì v jednu chvíli. */
 		public EnemyMove[] enemyMap = new EnemyMove[200];
 		private int enemies = 0;
+		public Wave wave;
 	
 	/**
 	 * 0. Start 
@@ -103,6 +107,13 @@ public class Screen extends JPanel implements Runnable {
 				for(int y = 0; y < gridCountY; y++) {
 					g.drawImage(terrain[map[x][y]], sizeX + (x*sizeX), sizeY + (y*sizeY), sizeX, sizeY, null);
 					g.drawRect(sizeX + (x*sizeX), sizeY + (y*sizeY), sizeX, sizeY);
+				}
+			}
+			
+			// Enemy
+			for(int i = 0; i < this.enemyMap.length; i++) {
+				if(this.enemyMap[i] != null) {
+					g.drawImage(this.enemyMap[i].enemy.texture, enemyMap[i].xPos + Screen.gridWidth, enemyMap[i].yPos + Screen.gridHeight, Screen.gridWidth, Screen.gridHeight, null);
 				}
 			}
 			
@@ -185,6 +196,7 @@ public class Screen extends JPanel implements Runnable {
 		user = new User(this);
 		levelFile = new LevelFile();
 		ClassLoader classLoader = this.getClass().getClassLoader();
+		wave = new Wave(this);
 		
 		for(int y = 0; y < 10; y++) {
 			for(int x = 0; x < 10; x++) {	// terrain.png je 250*250 pixelù, jeden typ krajiny je 25*25 pixelù
@@ -203,6 +215,7 @@ public class Screen extends JPanel implements Runnable {
 		this.map = this.level.map;
 		
 		this.scene = 1;	// Level 1
+		this.wave.waveNumber = 0;
 	}
 	
 	public void run() {
@@ -222,6 +235,8 @@ public class Screen extends JPanel implements Runnable {
 				frames = 0;
 			}
 			
+			updateEnemy();
+			
 			try {
 				Thread.sleep(2);
 			} catch (InterruptedException e) {
@@ -229,6 +244,21 @@ public class Screen extends JPanel implements Runnable {
 			}
 		}
 		System.exit(0);
+	}
+	
+	public void updateEnemy() {
+		if(wave.isEnemySpawning) {
+			wave.spawnEnemies();
+		}
+	}
+	
+	public void spawnEnemy() {
+		for(int i = 0; i < this.enemyMap.length; i++) {
+			if(this.enemyMap[i] == null) {
+				this.enemyMap[i] = new EnemyMove(Enemy.enemyList[0], level.spawnPoint);
+				break;
+			}
+		}
 	}
 	
 	public void placeTower(int x, int y) {
@@ -287,6 +317,10 @@ public class Screen extends JPanel implements Runnable {
 	}
 	
 	public class KeyTyped {
+		
+		public void keyENTER() {
+			wave.nextWave();
+		}
 		
 		public void keyESC() {
 			running = false;

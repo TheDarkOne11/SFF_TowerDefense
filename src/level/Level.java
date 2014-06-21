@@ -4,7 +4,7 @@ import core.SpawnPoint;
 
 public class Level {
 	public int[][] map;
-	SpawnPoint spawnPoint;
+	public SpawnPoint spawnPoint;
 	
 	public void FindSpawnPoint() {
 		for(int x = 0; x < map.length; x++) {

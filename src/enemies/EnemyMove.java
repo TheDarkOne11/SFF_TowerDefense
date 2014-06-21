@@ -4,11 +4,11 @@ import core.Screen;
 import core.SpawnPoint;
 
 public class EnemyMove {
-	Enemy enemy;
+	public Enemy enemy;
 	SpawnPoint spawnPoint;
 	
-	int xPos;
-	int yPos;
+	public int xPos;
+	public int yPos;
 	int routePosX;
 	int routePosY;
 	

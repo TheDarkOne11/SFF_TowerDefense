@@ -29,6 +29,10 @@ public class KeyHandler implements KeyListener {
 			this.keyTyped.keyESC();
 		}
 		
+		if(keycode == e.VK_ENTER) {
+			this.keyTyped.keyENTER();
+		}
+		
 		if(keycode == e.VK_SPACE) {
 			this.keyTyped.keySPACE();
 		}
