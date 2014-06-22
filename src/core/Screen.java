@@ -34,7 +34,7 @@ public class Screen extends JPanel implements Runnable {
 	
 	// Main Grid
 	public static int gridCountX = 25;	// 25
-	public static int gridCountY = 15;	// 15
+	public static int gridCountY = 10;	// 15
 	public static int gridWidth = 1;
 	public static int gridHeight = 1;
 	
@@ -91,11 +91,8 @@ public class Screen extends JPanel implements Runnable {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 		} else if(scene == 1){
-			int gapX = 300;	// Zvìtšení èásti pod tabulkou
-			int gapY = 125;
-			//TODO Alternativa
-			/*int gapX = this.getWidth()/16;
-			int gapY = this.getHeight()/9;*/
+			int gapX = this.frame.getWidth()/16 + 2*Screen.gridCountX;
+			int gapY = this.frame.getHeight()/9 + 5*Screen.gridCountY;
 			
 			/** Velikost políèka X*/
 			Screen.gridWidth = (this.frame.getWidth() - gapX) / (1 + gridCountX);
@@ -122,26 +119,9 @@ public class Screen extends JPanel implements Runnable {
 				}
 			}
 			
-			// Health and money
-			String health = "Health: " + user.player.health;
-			String money = "Money: " + user.player.money;
-			
-			g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + 5, Screen.gridWidth*4, gapY/4);
-			g.drawString(health, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + 5 + gapY/6);
-			
-			g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + gapY/4 + 5, Screen.gridWidth*4, gapY/4);
-			g.drawString(money, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + gapY/4 + 5 + gapY/6);
-			
-			g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + 2*gapY/4 + 5, Screen.gridWidth*4, gapY/4);
-			g.drawString(money, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + 2*gapY/4 + 5 + gapY/6);
-			
-			// Tower scrool list num. 1
-			g.drawRect(Screen.gridWidth/2 + Screen.gridWidth*4 + + 5, this.frame.getHeight() - gapY + 5, Screen.gridWidth, 3*gapY/4);
-				// Tower scrool list num. 2
-			
 			// Tower list
 			int TLCountX = 20;
-			int TLCountY = 2;
+			int TLCountY = 3;
 			int startX = Screen.gridWidth/2 + Screen.gridWidth*4 + Screen.gridWidth + 10;
 			int startY = this.frame.getHeight() - gapY + 5;
 			this.shopGridStartX_Mouse = startX;
@@ -169,6 +149,21 @@ public class Screen extends JPanel implements Runnable {
 				}
 			}
 			
+			// Health and money
+				String health = "Health: " + user.player.health;
+				String money = "Money: " + user.player.money;
+						
+				g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + 5, Screen.gridWidth*4, Screen.gridHeight);
+				g.drawString(health, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + Screen.gridHeight);
+						
+				g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + Screen.gridHeight + 5, Screen.gridWidth*4, Screen.gridHeight);
+				g.drawString(money, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + Screen.gridHeight + Screen.gridHeight);
+						
+				g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + 2*Screen.gridHeight + 5, Screen.gridWidth*4, Screen.gridHeight);
+				g.drawString(money, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + 2*Screen.gridHeight + Screen.gridHeight);
+						
+				// Tower scrool list num. 1
+				g.drawRect(Screen.gridWidth/2 + Screen.gridWidth*4 + 5, this.frame.getHeight() - gapY + 5, Screen.gridWidth, 3*Screen.gridHeight);
 		}
 		
 		// Umístìní vìže		
@@ -349,8 +344,8 @@ public class Screen extends JPanel implements Runnable {
 		}
 		
 		public void keyBACKSPACE() {
-			LevelMaker.blankLevel();
-			startGame(user, "BlankLevel");
+			LevelMaker.testLevel();
+			startGame(user, "TestLevel");
 		}
 		
 	}

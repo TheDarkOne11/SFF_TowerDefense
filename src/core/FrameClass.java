@@ -14,8 +14,7 @@ public class FrameClass extends JFrame {
 	
 	public FrameClass() {
 		this.setTitle("SFF's Castle Tower Defense");
-		this.setExtendedState(MAXIMIZED_BOTH);
-		this.setUndecorated(true);	//Pokud chci odstranit horní lištu
+		this.setSize(800, 600);
 		this.setVisible(true);
 		this.addWindowListener(new CloseWindow_WindowAdapter());
 		

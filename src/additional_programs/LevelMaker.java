@@ -14,9 +14,8 @@ public class LevelMaker {
 	static BufferedWriter buff;
 	final static int numberOfTerrains = 3;
 	
-	public static void randomLevel() {
-		fileName = "RandomLevel";
-		Random rn = new Random();
+	public static void testLevel() {
+		fileName = "TestLevel";
 		
 		try {
 			file = new File("level/" + fileName + ".level");
@@ -24,7 +23,17 @@ public class LevelMaker {
 			
 			for(int y = 0; y < Screen.gridCountY; y++) {
 				for(int x = 0; x < Screen.gridCountX; x++) {
-					buff.write(rn.nextInt(numberOfTerrains) + " ");
+					if(y == 0) {
+						if(x == 0) {
+							buff.write(2 + " ");
+						} else if(x == Screen.gridCountX-1) {
+							buff.write(3 + " ");
+						} else {
+							buff.write(1 + " ");
+						}
+					} else {
+						buff.write(0 + " ");
+					}
 				}
 				buff.newLine();
 			}
