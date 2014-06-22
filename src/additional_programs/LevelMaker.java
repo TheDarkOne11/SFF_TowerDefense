@@ -12,11 +12,11 @@ public class LevelMaker {
 	static File file;
 	static String fileName;
 	static BufferedWriter buff;
+	final static int numberOfTerrains = 3;
 	
 	public static void randomLevel() {
 		fileName = "RandomLevel";
 		Random rn = new Random();
-		final int numberOfTerrains = 3;
 		
 		try {
 			file = new File("level/" + fileName + ".level");

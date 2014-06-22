@@ -1,6 +1,5 @@
 package level;
 
-import core.SpawnPoint;
 
 public class Level {
 	public int[][] map;

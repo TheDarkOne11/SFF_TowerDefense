@@ -1,7 +1,7 @@
 package enemies;
 
+import level.SpawnPoint;
 import core.Screen;
-import core.SpawnPoint;
 
 public class EnemyMove {
 	public Enemy enemy;
@@ -12,7 +12,7 @@ public class EnemyMove {
 	int routePosX;
 	int routePosY;
 	
-	boolean attack;
+	public boolean attack;
 	int health;
 	
 	public EnemyMove(Enemy enemy, SpawnPoint spawnPoint) {

@@ -18,10 +18,11 @@ import level.LevelFile;
 import towers.Tower;
 import additional_programs.LevelMaker;
 import enemies.Enemy;
+import enemies.EnemyAI;
 import enemies.EnemyMove;
 import enemies.Wave;
 
-//TODO Epizoda 16
+//TODO Epizoda 24
 
 /* Hlavní tøída, která celou hru povede. */
 public class Screen extends JPanel implements Runnable {
@@ -65,6 +66,7 @@ public class Screen extends JPanel implements Runnable {
 		public EnemyMove[] enemyMap = new EnemyMove[200];
 		private int enemies = 0;
 		public Wave wave;
+		EnemyAI enemyAI;
 	
 	/**
 	 * 0. Start 
@@ -91,6 +93,9 @@ public class Screen extends JPanel implements Runnable {
 		} else if(scene == 1){
 			int gapX = 300;	// Zvìtšení èásti pod tabulkou
 			int gapY = 125;
+			//TODO Alternativa
+			/*int gapX = this.getWidth()/16;
+			int gapY = this.getHeight()/9;*/
 			
 			/** Velikost políèka X*/
 			Screen.gridWidth = (this.frame.getWidth() - gapX) / (1 + gridCountX);
@@ -213,6 +218,7 @@ public class Screen extends JPanel implements Runnable {
 		this.level = levelFile.getLevel(levelName);
 		this.level.FindSpawnPoint();
 		this.map = this.level.map;
+		this.enemyAI = new EnemyAI(this.level);
 		
 		this.scene = 1;	// Level 1
 		this.wave.waveNumber = 0;
@@ -247,6 +253,18 @@ public class Screen extends JPanel implements Runnable {
 	}
 	
 	public void updateEnemy() {
+		// Moving
+		for(int i = 0; i < this.enemyMap.length; i++) {
+			if(this.enemyMap[i] != null) {
+				if(!this.enemyMap[i].attack) {
+					EnemyAI.moveAI.move(enemyMap[i]);
+				}
+				
+				enemyMap[i].update();
+			}
+		}
+		
+		// Spawning
 		if(wave.isEnemySpawning) {
 			wave.spawnEnemies();
 		}
