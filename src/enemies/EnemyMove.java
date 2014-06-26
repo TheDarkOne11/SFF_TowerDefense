@@ -19,8 +19,8 @@ public class EnemyMove {
 		this.enemy = enemy;
 		this.routePosX = spawnPoint.getX();
 		this.routePosY = spawnPoint.getY();
-		this.xPos = (int) (spawnPoint.getX() * Screen.gridWidth);
-		this.yPos = (int) (spawnPoint.getY() * Screen.gridHeight);
+		this.xPos = (int) (spawnPoint.getX() * Screen.gridSize);
+		this.yPos = (int) (spawnPoint.getY() * Screen.gridSize);
 		this.attack = false;
 		this.health = enemy.health;
 	}

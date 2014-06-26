@@ -1,6 +1,5 @@
 package level;
 
-import enemies.EnemyRoute;
 
 public class Base {
 	private int xPos;

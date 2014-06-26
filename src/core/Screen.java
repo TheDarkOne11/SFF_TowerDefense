@@ -34,12 +34,14 @@ public class Screen extends JPanel implements Runnable {
 	
 	// Main Grid
 	public static int gridCountX = 25;	// 25
-	public static int gridCountY = 10;	// 15
-	public static int gridWidth = 1;
-	public static int gridHeight = 1;
+	public static int gridCountY = 15;	// 15
+	/* Velikost x a y je stejná*/
+	public static double gridSize = 1;
 	
 	// Shop Grid
-	public int shopGridStartX_Mouse, shopGridStartY_Mouse, towerCountX_Mouse, towerCountY_Mouse;
+	public static double shopGridStartX, shopGridStartY;
+	public static int shopGridCountX = 20;
+	public static int shopGridCountY = 2;
 
 	// Mouse
 	/**
@@ -90,14 +92,8 @@ public class Screen extends JPanel implements Runnable {
 		if(scene == 0) {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
-		} else if(scene == 1){
-			int gapX = this.frame.getWidth()/16 + 2*Screen.gridCountX;
-			int gapY = this.frame.getHeight()/9 + 5*Screen.gridCountY;
-			
-			/** Velikost políèka X*/
-			Screen.gridWidth = (this.frame.getWidth() - gapX) / (1 + gridCountX);
-			/** Velikost políèka Y*/
-			Screen.gridHeight = (this.frame.getHeight() - gapY) / (1 + gridCountY);
+		} else if(scene == 1){			
+			Screen.gridSize = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
 						
 			// Background
 			g.setColor(Color.GREEN);
@@ -107,84 +103,75 @@ public class Screen extends JPanel implements Runnable {
 			g.setColor(Color.black);
 			for(int x = 0; x < gridCountX; x++) {
 				for(int y = 0; y < gridCountY; y++) {
-					g.drawImage(terrain[map[x][y]], Screen.gridWidth + (x*Screen.gridWidth), Screen.gridHeight + (y*Screen.gridHeight), Screen.gridWidth, Screen.gridHeight, null);
-					g.drawRect(Screen.gridWidth + (x*Screen.gridWidth), Screen.gridHeight + (y*Screen.gridHeight), Screen.gridWidth, Screen.gridHeight);
+					g.drawImage(terrain[map[x][y]], (int) (Screen.gridSize + (x*Screen.gridSize)), (int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize, null);
+					g.drawRect((int) (Screen.gridSize + (x*Screen.gridSize)),(int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
 				}
 			}
 			
 			// Enemy
 			for(int i = 0; i < this.enemyMap.length; i++) {
 				if(this.enemyMap[i] != null) {
-					g.drawImage(this.enemyMap[i].enemy.texture, enemyMap[i].xPos + Screen.gridWidth, enemyMap[i].yPos + Screen.gridHeight, Screen.gridWidth, Screen.gridHeight, null);
+					g.drawImage(this.enemyMap[i].enemy.texture,(int) (enemyMap[i].xPos + Screen.gridSize),(int) (enemyMap[i].yPos + Screen.gridSize),(int) Screen.gridSize,(int) Screen.gridSize, null);
 				}
 			}
 			
 			// Tower list
-			int TLCountX = 20;
-			int TLCountY = 3;
-			int startX = Screen.gridWidth/2 + Screen.gridWidth*4 + Screen.gridWidth + 10;
-			int startY = this.frame.getHeight() - gapY + 5;
-			this.shopGridStartX_Mouse = startX;
-			this.shopGridStartY_Mouse = startY;
-			this.towerCountX_Mouse = TLCountX;
-			this.towerCountY_Mouse = TLCountY;
+			Screen.shopGridStartX = Screen.gridSize*6.5;
+			Screen.shopGridStartY = Screen.gridSize*(Screen.gridCountY + 1.25);
 			
-			for(int x = 0; x < TLCountX; x++) {
-				for(int y = 0; y < TLCountY; y++) {
-					if(Tower.towerList[x*TLCountY + y] != null) {
+			for(int x = 0; x < Screen.shopGridCountX; x++) {
+				for(int y = 0; y < Screen.shopGridCountY; y++) {
+					if(Tower.towerList[x*Screen.shopGridCountY + y] != null) {
 						// Tower Image
-						g.drawImage(Tower.towerList[x*TLCountY + y].texture, startX + (x*Screen.gridWidth), startY + (y*Screen.gridHeight), (int) gridWidth, (int) gridHeight, null);
+						g.drawImage(Tower.towerList[x*Screen.shopGridCountY + y].texture,(int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize, null);
 					
 						// Zašedne vìž, pokud na ní není dostatek penìz
-						if(Tower.towerList[x*TLCountY + y].cost > this.user.player.money) {
+						if(Tower.towerList[x*Screen.shopGridCountY + y].cost > this.user.player.money) {
 							g.setColor(new Color(68, 0, 68, 100));
-							g.fillRect(startX + (x*Screen.gridWidth), startY + (y*Screen.gridHeight), (int) gridWidth, (int) gridHeight);
+							g.fillRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize);
 						}
 					
 					}
 					
 					// Shop grid
 					g.setColor(Color.black);
-					g.drawRect(startX + (x*Screen.gridWidth), startY + (y*Screen.gridHeight), Screen.gridWidth, Screen.gridHeight);
+					g.drawRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
 				}
 			}
 			
 			// Health and money
 				String health = "Health: " + user.player.health;
 				String money = "Money: " + user.player.money;
+					
+				g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
+				g.drawString(health, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(health)/2), (int) (Screen.gridSize*(Screen.gridCountY+1.75) + g.getFontMetrics().getHeight()/4));
 						
-				g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + 5, Screen.gridWidth*4, Screen.gridHeight);
-				g.drawString(health, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + Screen.gridHeight);
-						
-				g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + Screen.gridHeight + 5, Screen.gridWidth*4, Screen.gridHeight);
-				g.drawString(money, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + Screen.gridHeight + Screen.gridHeight);
-						
-				g.drawRect(Screen.gridWidth/2, this.frame.getHeight() - gapY + 2*Screen.gridHeight + 5, Screen.gridWidth*4, Screen.gridHeight);
-				g.drawString(money, Screen.gridWidth*2 - health.length(), this.frame.getHeight() - gapY + 2*Screen.gridHeight + Screen.gridHeight);
-						
+				g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+2.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
+				g.drawString(money, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(money)/2), (int) (Screen.gridSize*(Screen.gridCountY+2.75) + g.getFontMetrics().getHeight()/4));
+				
 				// Tower scrool list num. 1
-				g.drawRect(Screen.gridWidth/2 + Screen.gridWidth*4 + 5, this.frame.getHeight() - gapY + 5, Screen.gridWidth, 3*Screen.gridHeight);
+				g.drawRect((int) (Screen.gridSize*5.25), (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize, (int) Screen.gridSize*Screen.shopGridCountY);
 		}
 		
 		// Umístìní vìže		
 		for(int x = 0; x < Screen.gridCountX; x++){
 			for(int y = 0; y < Screen.gridCountY; y++) {
 				if(towerMap[x][y] != null) {
-					int centerX = (int) gridWidth + x*(int) gridWidth - towerMap[x][y].range*(int) gridWidth;
-					int centerY = (int) gridHeight + y*(int) gridHeight - towerMap[x][y].range*(int) gridHeight;
+					int centerX = (int) gridSize + x*(int) gridSize - towerMap[x][y].range*(int) gridSize;
+					int centerY = (int) gridSize + y*(int) gridSize - towerMap[x][y].range*(int) gridSize;
 					
 					g.setColor(Color.gray);
-					g.drawOval(centerX, centerY, towerMap[x][y].range*2*(int) gridWidth + (int) gridWidth, towerMap[x][y].range*2*(int) gridHeight + (int) gridHeight);
+					g.drawOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
 					g.setColor(new Color(64, 64, 64, 64));
-					g.fillOval(centerX, centerY, towerMap[x][y].range*2*(int) gridWidth + (int) gridWidth, towerMap[x][y].range*2*(int) gridHeight + (int) gridHeight);
-					g.drawImage(Tower.towerList[towerMap[x][y].id].texture, (int) gridWidth + x*(int)gridWidth, (int) gridHeight + y*(int) gridHeight, (int) gridWidth, (int) gridHeight, null);
+					g.fillOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
+					g.drawImage(Tower.towerList[towerMap[x][y].id].texture, (int) gridSize + x*(int)gridSize, (int) gridSize + y*(int) gridSize, (int) gridSize, (int) gridSize, null);
 				}
 			}
 		}
 		
 		// HAND
 		if(hand != 0 && Tower.towerList[hand-1] != null) {
-			g.drawImage(Tower.towerList[hand-1].texture, this.handXPos - (int) Screen.gridWidth/2, this.handYPos - (int) Screen.gridHeight/2, (int) Screen.gridWidth, (int) Screen.gridHeight, null);
+			g.drawImage(Tower.towerList[hand-1].texture, this.handXPos - (int) Screen.gridSize/2, this.handYPos - (int) Screen.gridSize/2, (int) Screen.gridSize, (int) Screen.gridSize, null);
 		}
 		
 		// FPS
@@ -275,8 +262,8 @@ public class Screen extends JPanel implements Runnable {
 	}
 	
 	public void placeTower(int x, int y) {
-		int xPos = (int) (x /gridWidth);
-		int yPos = (int) (y/ gridHeight);
+		int xPos = (int) (x /gridSize);
+		int yPos = (int) (y/ gridSize);
 		
 		if(xPos > 0 && xPos <= Screen.gridCountX && yPos > 0 && yPos <= Screen.gridCountY) {
 			xPos -= 1;
@@ -301,11 +288,11 @@ public class Screen extends JPanel implements Runnable {
 			if(scene == 1) {
 				if(mouseDown && hand == 0) {
 					// Jestli je myš umístìna nìkdy v shopu_Pozice X
-					if(e.getXOnScreen() >= shopGridStartX_Mouse && e.getXOnScreen() <= shopGridStartX_Mouse*(1 + gridWidth)) {
+					if(e.getXOnScreen() >= shopGridStartX && e.getXOnScreen() <= shopGridStartX*(1 + gridSize)) {
 						// Jestli je myš umístìna nìkdy v shopu_Pozice X
-						if(e.getYOnScreen() >= shopGridStartY_Mouse && e.getYOnScreen() <= shopGridStartY_Mouse*(1 + gridHeight)) {
+						if(e.getYOnScreen() >= shopGridStartY && e.getYOnScreen() <= shopGridStartY*(1 + gridSize)) {
 							// Tower 1
-							if(e.getXOnScreen() >= shopGridStartX_Mouse && e.getXOnScreen() <= shopGridStartX_Mouse+gridWidth && e.getYOnScreen() >= shopGridStartY_Mouse && e.getYOnScreen() <= shopGridStartY_Mouse+gridHeight) {
+							if(e.getXOnScreen() >= shopGridStartX && e.getXOnScreen() <= shopGridStartX+gridSize && e.getYOnScreen() >= shopGridStartY && e.getYOnScreen() <= shopGridStartY+gridSize) {
 								if(user.player.money >= Tower.towerList[0].cost) {
 									hand = 1;
 								}

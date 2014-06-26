@@ -1,8 +1,8 @@
 package enemies;
 
-import core.Screen;
 import level.Base;
 import level.Level;
+import core.Screen;
 
 public class EnemyRoute {
 	Level level;
@@ -35,7 +35,6 @@ public class EnemyRoute {
 	private void calculateNextPos() {
 		for(int i = 1; i <= 4; i++) {
 			if(i != this.lastPos) {
-				System.out.println("[EnemyRoute] " + xPos + "/ " + yPos);
 				if(i == UP && yPos > 1) {	// yPos nesmí jít mimo grid
 					if(level.map[this.xPos][this.yPos - 1] == 1) {
 						this.lastPos = DOWN;	// Když jsem šel nahoru, posl. pozice musí být dole

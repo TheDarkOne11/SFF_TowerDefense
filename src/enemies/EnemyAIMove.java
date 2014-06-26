@@ -27,8 +27,8 @@ public class EnemyAIMove extends EnemyAI {
 				}
 			}
 		} else {
-			double xPos = enemyMove.xPos / Screen.gridWidth;
-			double yPos = enemyMove.yPos / Screen.gridHeight;
+			double xPos = enemyMove.xPos / Screen.gridSize;
+			double yPos = enemyMove.yPos / Screen.gridSize;
 			
 			if(xPos > enemyMove.routePosX) enemyMove.xPos -= enemyMove.enemy.speed/Screen.gridCountX;
 			if(xPos < enemyMove.routePosX) enemyMove.xPos += enemyMove.enemy.speed/Screen.gridCountX;
