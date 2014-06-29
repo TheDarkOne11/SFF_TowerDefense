@@ -22,7 +22,7 @@ import enemies.EnemyAI;
 import enemies.EnemyMove;
 import enemies.Wave;
 
-//TODO Epizoda 24
+//TODO Epizoda 26
 
 /* Hlavní tøída, která celou hru povede. */
 public class Screen extends JPanel implements Runnable {
