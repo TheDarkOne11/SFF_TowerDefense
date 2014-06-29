@@ -17,7 +17,7 @@ public class EnemyAI {
 		this.basePosX = enemyRoute.base.getX();
 		this.basePosY = enemyRoute.base.getY();
 		
-		moveAI = new EnemyAIMove(0);
+		moveAI = new EnemyAIMove(this.id);
 	}
 	
 	public EnemyAI(int id) {

@@ -12,7 +12,7 @@ public class EnemyRoute {
 	
 	int xPos;
 	int yPos;
-	int lastPos = -1;
+	double lastPos = -1;
 	public int UP = 1;
 	public int DOWN = 2;
 	public int LEFT = 3;
@@ -36,7 +36,7 @@ public class EnemyRoute {
 		for(int i = 1; i <= 4; i++) {
 			if(i != this.lastPos) {
 				if(i == UP && yPos > 1) {	// yPos nesmí jít mimo grid
-					if(level.map[this.xPos][this.yPos - 1] == 1) {
+					if(level.map[this.xPos][(this.yPos - 1)] == 1) {
 						this.lastPos = DOWN;	// Když jsem šel nahoru, posl. pozice musí být dole
 						this.route[this.xPos][this.yPos] = UP;
 						this.yPos--;
@@ -49,7 +49,7 @@ public class EnemyRoute {
 				}
 				
 				if(i == DOWN && yPos < Screen.gridCountY-1) {	
-					if(level.map[this.xPos][this.yPos + 1] == 1) {
+					if(level.map[this.xPos][(this.yPos + 1)] == 1) {
 						this.lastPos = UP;
 						this.route[this.xPos][this.yPos] = DOWN;
 						this.yPos++;

@@ -7,8 +7,8 @@ public class EnemyMove {
 	public Enemy enemy;
 	SpawnPoint spawnPoint;
 	
-	public int xPos;
-	public int yPos;
+	public double xPos;
+	public double yPos;
 	int routePosX;
 	int routePosY;
 	
