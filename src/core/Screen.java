@@ -179,12 +179,16 @@ public class Screen extends JPanel implements Runnable {
 		g.drawString(fps + "", 10, 10);
 	}
 	
+	/**
+	 * Naète základní vìci.
+	 */
 	public void loadGame() {
 		user = new User(this);
 		levelFile = new LevelFile();
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		wave = new Wave(this);
 		
+		// Pøeète terrain soubor, získá typy prostøedí.
 		for(int y = 0; y < 10; y++) {
 			for(int x = 0; x < 10; x++) {	// terrain.png je 250*250 pixelù, jeden typ krajiny je 25*25 pixelù
 				terrain[x + y*10] = new ImageIcon(classLoader.getResource(packageName + "/terrain.png")).getImage();
@@ -195,6 +199,11 @@ public class Screen extends JPanel implements Runnable {
 		running = true;
 	}
 	
+	/**
+	 * Zaène samotné hraní, naète mapu, vìže, nepøátele atd.
+	 * @param user
+	 * @param levelName
+	 */
 	public void startGame(User user, String levelName) {
 		user.createPlayer();
 		this.level = levelFile.getLevel(levelName);
@@ -234,6 +243,9 @@ public class Screen extends JPanel implements Runnable {
 		System.exit(0);
 	}
 	
+	/**
+	 * Update pohybu a spawnování nepøátel.
+	 */
 	public void updateEnemy() {
 		// Moving
 		for(int i = 0; i < this.enemyMap.length; i++) {
@@ -252,6 +264,9 @@ public class Screen extends JPanel implements Runnable {
 		}
 	}
 	
+	/**
+	 * Zaregistruje nepøítele.
+	 */
 	public void spawnEnemy() {
 		for(int i = 0; i < this.enemyMap.length; i++) {
 			if(this.enemyMap[i] == null) {
@@ -261,6 +276,11 @@ public class Screen extends JPanel implements Runnable {
 		}
 	}
 	
+	/**
+	 * Položení vìže po nákupu.
+	 * @param x
+	 * @param y
+	 */
 	public void placeTower(int x, int y) {
 		int xPos = (int) (x /gridSize);
 		int yPos = (int) (y/ gridSize);
