@@ -1,5 +1,10 @@
 package level;
 
+/**
+ * Poèáteèní místo nepøátel.
+ * @author Petr
+ *
+ */
 public class SpawnPoint {
 	private int x;
 	private int y;

@@ -1,5 +1,10 @@
 package core;
 
+/**
+ * Hr·Ë v levelu.
+ * @author Petr
+ *
+ */
 public class Player {
 	
 	int health;

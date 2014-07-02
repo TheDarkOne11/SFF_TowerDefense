@@ -1,6 +1,10 @@
 package level;
 
-
+/**
+ * Základna, kam se snaží dostat nepøátelé.
+ * @author Petr
+ *
+ */
 public class Base {
 	private int xPos;
 	private int yPos;

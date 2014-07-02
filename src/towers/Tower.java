@@ -30,6 +30,6 @@ public class Tower {
 		this.textureFile = textureFile;
 		this.texture = new ImageIcon("res/tower/" + textureFile + ".png").getImage();
 		
-		return null;
+		return this;
 	}
 }

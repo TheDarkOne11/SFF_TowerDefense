@@ -1,5 +1,10 @@
 package core;
 
+/**
+ * Úèet, pøes kterı se zapíná aplikace.
+ * @author Petr
+ *
+ */
 public class User {
 	private Screen screen;
 	Player player;

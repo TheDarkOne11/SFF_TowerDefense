@@ -7,6 +7,11 @@ import java.util.Scanner;
 
 import core.Screen;
 
+/**
+ * Ète údaje z level souboru.
+ * @author Petr
+ *
+ */
 public class LevelFile {
 	FileInputStream file;
 	InputStreamReader reader;

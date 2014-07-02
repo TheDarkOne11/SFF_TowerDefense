@@ -1,6 +1,10 @@
 package level;
 
-
+/**
+ * Data o levelu. Uložena mapa a spawnpoint.
+ * @author Petr
+ *
+ */
 public class Level {
 	public int[][] map;
 	public SpawnPoint spawnPoint;

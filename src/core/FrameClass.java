@@ -6,7 +6,11 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-/* Tower Defense podle uživatele ScratchForFun.*/
+/**
+ * Okno a posluchaèe.
+ * @author Petr
+ *
+ */
 public class FrameClass extends JFrame {
 	
 	public static void main(String[] args) {

@@ -17,14 +17,14 @@ import level.Level;
 import level.LevelFile;
 import towers.Tower;
 import additional_programs.LevelMaker;
-import enemies.Enemy;
-import enemies.EnemyAI;
-import enemies.EnemyMove;
-import enemies.Wave;
+import enemy.Enemy;
+import enemy.EnemyAI;
+import enemy.EnemyMove;
+import enemy.Wave;
 
 //TODO Epizoda 26
 
-/* Hlavní tøída, která celou hru povede. */
+/** Hlavní tøída, která celou hru povede. */
 public class Screen extends JPanel implements Runnable {
 	
 	Thread thread = new Thread(this);
@@ -239,7 +239,7 @@ public class Screen extends JPanel implements Runnable {
 		for(int i = 0; i < this.enemyMap.length; i++) {
 			if(this.enemyMap[i] != null) {
 				if(!this.enemyMap[i].attack) {
-					EnemyAI.moveAI.move(enemyMap[i]);
+					EnemyAI.enemyMoveAI.move(enemyMap[i]);
 				}
 				
 				enemyMap[i].update();
