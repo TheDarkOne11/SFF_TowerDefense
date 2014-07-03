@@ -41,7 +41,7 @@ public class EnemyRoute {
 	private void calculateNextPos() {
 		for(int i = 1; i <= 4; i++) {
 			if(i != this.lastPos) {	// Podmínka: jinak by se pohyboval mezi nynìjší a pøedchozí pozicí
-				if(i == UP && yPos > 1) {	// yPos nesmí jít mimo grid
+				if(i == UP && yPos > 0) {	// yPos nesmí jít mimo grid
 					if(level.map[this.xPos][(this.yPos - 1)] == 1) {
 						this.lastPos = DOWN;	// Když jsem šel nahoru, posl. pozice musí být dole
 						this.route[this.xPos][this.yPos] = UP;
@@ -67,7 +67,7 @@ public class EnemyRoute {
 					}
 				}
 				
-				if(i == LEFT && xPos > 1) {	
+				if(i == LEFT && xPos > 0) {	
 					if(level.map[this.xPos - 1][this.yPos] == 1) {
 						this.lastPos = RIGHT;
 						this.route[this.xPos][this.yPos] = LEFT;

@@ -10,7 +10,7 @@ public class Wave {
 	public int enemiesPerRound = 10;
 	public boolean isEnemySpawning;
 	public int currentDelay = 0;
-	public int spawnRate = 1000;
+	public int spawnRate = 500;
 	
 	public int enemyCount;
 	

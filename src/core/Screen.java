@@ -9,7 +9,6 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
-import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -66,7 +65,7 @@ public class Screen extends JPanel implements Runnable {
 		
 	// Enemy
 		/** Kolik nepøátel na mapì je na mapì v jednu chvíli. */
-		public EnemyMove[] enemyMap = new EnemyMove[200];
+		public EnemyMove[] enemyMap = new EnemyMove[1];
 		private int enemies = 0;
 		public Wave wave;
 		EnemyAI enemyAI;
@@ -226,14 +225,14 @@ public class Screen extends JPanel implements Runnable {
 		while(running) {
 			repaint();
 			frames++;
+
+			updateEnemy();
 			
 			if(System.currentTimeMillis() - 1000 >= lastFrame) {
 				fps = frames;
 				lastFrame = System.currentTimeMillis();
 				frames = 0;
 			}
-			
-			updateEnemy();
 			
 			try {
 				Thread.sleep(2);

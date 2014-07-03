@@ -30,7 +30,6 @@ public class LevelFile {
 			int y = 0;
 			while(scanner.hasNext()) {
 				level.map[x][y] = scanner.nextInt();
-				
 				if(x < Screen.gridCountX - 1) {
 					x++;
 				} else {

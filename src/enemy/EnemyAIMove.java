@@ -18,6 +18,7 @@ public class EnemyAIMove extends EnemyAI {
 		 * Podmínka 1: Pokud je pøímo uprostøed ètverce (enemyMove.xPos % Screen.gridSize == 0).
 		 * Podmínka 2: Pokud již byla routePos updatována (enemyMove.routePosX == (int) (enemyMove.xPos/Screen.gridSize))
 		 */
+		//TODO Upravit podmínku, tato nepracuje pro všechny rychlosti(nepøítel mine prostøedek ètverce)
 		if((int) enemyMove.xPos % Screen.gridSize == 0 && (int) enemyMove.yPos % Screen.gridSize == 0 && enemyMove.routePosX == (int) (enemyMove.xPos/Screen.gridSize) && enemyMove.routePosY == (int) (enemyMove.yPos/Screen.gridSize)) {
 			if(enemyMove.routePosX == super.basePosX && enemyMove.routePosY == super.basePosY) {
 				enemyMove.attack = true;
@@ -37,10 +38,10 @@ public class EnemyAIMove extends EnemyAI {
 		} else {
 			double xPos = (int) enemyMove.xPos / Screen.gridSize;
 			double yPos = (int) enemyMove.yPos / Screen.gridSize;
-			if(xPos > enemyMove.routePosX) enemyMove.xPos -= enemyMove.enemy.speed/Screen.gridCountX;
-			if(xPos < enemyMove.routePosX) enemyMove.xPos += enemyMove.enemy.speed/Screen.gridCountX;
-			if(yPos > enemyMove.routePosY) enemyMove.yPos -= enemyMove.enemy.speed/Screen.gridCountY;
-			if(yPos < enemyMove.routePosY) enemyMove.yPos += enemyMove.enemy.speed/Screen.gridCountY;
+			if(xPos > enemyMove.routePosX) enemyMove.xPos -= enemyMove.enemy.speed/210;
+			if(xPos < enemyMove.routePosX) enemyMove.xPos += enemyMove.enemy.speed/210;
+			if(yPos > enemyMove.routePosY) enemyMove.yPos -= enemyMove.enemy.speed/210;
+			if(yPos < enemyMove.routePosY) enemyMove.yPos += enemyMove.enemy.speed/210;
 		}
 	}
 	
