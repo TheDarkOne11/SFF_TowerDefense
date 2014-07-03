@@ -9,13 +9,14 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import level.Level;
 import level.LevelFile;
-import towers.Tower;
+import tower.Tower;
 import additional_programs.LevelMaker;
 import enemy.Enemy;
 import enemy.EnemyAI;
@@ -73,7 +74,7 @@ public class Screen extends JPanel implements Runnable {
 	/**
 	 * 0. Start 
 	 * 1. In Game */
-	public int scene;
+	public int gameState;
 	
 	/** Account */
 	User user;
@@ -89,10 +90,10 @@ public class Screen extends JPanel implements Runnable {
 	public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 		
-		if(scene == 0) {
+		if(gameState == 0) {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
-		} else if(scene == 1){			
+		} else if(gameState == 1){			
 			Screen.gridSize = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
 						
 			// Background
@@ -211,14 +212,14 @@ public class Screen extends JPanel implements Runnable {
 		this.map = this.level.map;
 		this.enemyAI = new EnemyAI(this.level);
 		
-		this.scene = 1;	// Level 1
+		this.gameState = 1;	// Level 1
 		this.wave.waveNumber = 0;
 	}
 	
 	public void run() {
 		long lastFrame = System.currentTimeMillis();
 		int frames = 0;
-		scene = 0;
+		gameState = 0;
 		
 		loadGame();
 		
@@ -291,7 +292,7 @@ public class Screen extends JPanel implements Runnable {
 			
 			if(towerMap[xPos][yPos] == null && map[xPos][yPos] == 0) {	// Pokud je místo prázdné
 				user.player.money -= Tower.towerList[hand-1].cost;
-				towerMap[xPos][yPos] = Tower.towerList[hand-1];
+				towerMap[xPos][yPos] = (Tower) Tower.towerList[hand-1].clone();
 			}
 		}
 	}
@@ -305,7 +306,7 @@ public class Screen extends JPanel implements Runnable {
 		}
 		
 		public void updateMouse(MouseEvent e) {
-			if(scene == 1) {
+			if(gameState == 1) {
 				if(mouseDown && hand == 0) {
 					// Jestli je myš umístìna nìkdy v shopu_Pozice X
 					if(e.getXOnScreen() >= shopGridStartX && e.getXOnScreen() <= shopGridStartX*(1 + gridSize)) {

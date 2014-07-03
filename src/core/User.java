@@ -14,7 +14,7 @@ public class User {
 	public User(Screen screen) {
 		this.screen = screen;
 		
-		this.screen.scene = 0;	//Sets scene to main menu
+		this.screen.gameState = 0;	//Sets scene to main menu
 	}
 	
 	public void createPlayer() {
