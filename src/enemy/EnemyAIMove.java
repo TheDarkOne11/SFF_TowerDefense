@@ -9,7 +9,7 @@ import core.Screen;
  */
 public class EnemyAIMove extends EnemyAI {
 	private double distanceToCenter;
-
+	
 	public EnemyAIMove(int id) {
 		super(id);
 	}
@@ -19,7 +19,6 @@ public class EnemyAIMove extends EnemyAI {
 		 * Podmínka 1: Pokud je pøímo uprostøed ètverce (enemyMove.xPos % Screen.gridSize == 0).
 		 * Podmínka 2: Pokud již byla routePos updatována (enemyMove.routePosX == (int) (enemyMove.xPos/Screen.gridSize))
 		 */
-		//TODO Upravit podmínku, tato nepracuje pro všechny rychlosti(nepøítel mine prostøedek ètverce)
 		if((int) enemyMove.xPos % Screen.gridSize == 0 && (int) enemyMove.yPos % Screen.gridSize == 0 && enemyMove.routePosX == (int) (enemyMove.xPos/Screen.gridSize) && enemyMove.routePosY == (int) (enemyMove.yPos/Screen.gridSize)) {
 			if(enemyMove.routePosX == super.basePosX && enemyMove.routePosY == super.basePosY) {
 				enemyMove.attack = true;

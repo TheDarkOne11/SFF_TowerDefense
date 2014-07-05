@@ -49,7 +49,7 @@ public class EnemyRoute {
 						
 						break;
 					} else if(level.map[this.xPos][this.yPos - 1] == this.baseID) {
-						base = new Base(this.xPos, this.yPos - 1);
+						base = new Base(this.xPos, this.yPos);
 						break;
 					}
 				}
@@ -62,7 +62,7 @@ public class EnemyRoute {
 						
 						break;
 					} else if(level.map[this.xPos][this.yPos + 1] == this.baseID) {
-						base = new Base(this.xPos, this.yPos + 1);
+						base = new Base(this.xPos, this.yPos);
 						break;
 					}
 				}
@@ -75,7 +75,7 @@ public class EnemyRoute {
 						
 						break;
 					} else if(level.map[this.xPos - 1][this.yPos] == this.baseID) {
-						base = new Base(this.xPos - 1, this.yPos);
+						base = new Base(this.xPos, this.yPos);
 						break;
 					}
 				}
@@ -88,7 +88,7 @@ public class EnemyRoute {
 						
 						break;
 					} else if(level.map[this.xPos + 1][this.yPos] == this.baseID) {
-						base = new Base(this.xPos + 1, this.yPos);
+						base = new Base(this.xPos, this.yPos);
 						break;
 					}
 				}

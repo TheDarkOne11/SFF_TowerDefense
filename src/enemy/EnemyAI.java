@@ -8,7 +8,7 @@ import level.Level;
 public class EnemyAI {
 	
 	public static EnemyRoute enemyRoute;
-	public static EnemyAIMove enemyMoveAI;
+	public static EnemyAIMove enemyAIMove;
 	
 	public int basePosX;
 	public int basePosY;
@@ -20,11 +20,14 @@ public class EnemyAI {
 		this.basePosX = enemyRoute.base.getX();
 		this.basePosY = enemyRoute.base.getY();
 		
-		enemyMoveAI = new EnemyAIMove(this.id);
+		enemyAIMove = new EnemyAIMove(id);
 	}
 	
 	public EnemyAI(int id) {
 		this.id = id;
+
+		this.basePosX = enemyRoute.base.getX();
+		this.basePosY = enemyRoute.base.getY();
 	}
 	
 	public EnemyRoute getRoute() {

@@ -65,7 +65,7 @@ public class Screen extends JPanel implements Runnable {
 		
 	// Enemy
 		/** Kolik nepøátel na mapì je na mapì v jednu chvíli. */
-		public EnemyMove[] enemyMap = new EnemyMove[1];
+		public EnemyMove[] enemyMap = new EnemyMove[200];
 		private int enemies = 0;
 		public Wave wave;
 		EnemyAI enemyAI;
@@ -225,7 +225,8 @@ public class Screen extends JPanel implements Runnable {
 		while(running) {
 			repaint();
 			frames++;
-
+			
+			//TODO Udìlat, aby se updatovaly každých napø. 40 framù
 			updateEnemy();
 			
 			if(System.currentTimeMillis() - 1000 >= lastFrame) {
@@ -251,7 +252,7 @@ public class Screen extends JPanel implements Runnable {
 		for(int i = 0; i < this.enemyMap.length; i++) {
 			if(this.enemyMap[i] != null) {
 				if(!this.enemyMap[i].attack) {
-					EnemyAI.enemyMoveAI.move(enemyMap[i]);
+					EnemyAI.enemyAIMove.move(enemyMap[i]);
 				}
 				
 				enemyMap[i].update();
