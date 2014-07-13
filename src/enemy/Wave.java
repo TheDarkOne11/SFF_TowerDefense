@@ -10,12 +10,13 @@ public class Wave {
 	public int enemiesPerRound = 1;
 	public boolean isEnemySpawning;
 	public int currentDelay = 0;
-	public int spawnRate = 500;
+	public int spawnRate = 1000;
 	
 	public int enemyCount;
 	
 	public Wave(Screen screen) {
 		this.screen = screen;
+		this.spawnRate /= screen.updatesPerSec;
 	}
 	
 	/**

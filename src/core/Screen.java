@@ -30,6 +30,7 @@ public class Screen extends JPanel implements Runnable {
 	Thread thread = new Thread(this);
 	FrameClass frame;
 	private int fps = 0;
+	public static int updatesPerSec = 25;
 	boolean running;
 	
 	// Main Grid
@@ -216,30 +217,39 @@ public class Screen extends JPanel implements Runnable {
 	}
 	
 	public void run() {
+		gameState = 0;
+		
 		long lastFrame = System.currentTimeMillis();
 		int frames = 0;
-		gameState = 0;
+		
+		int skipTics = 1000/updatesPerSec;
+		long nextGameTick = System.currentTimeMillis();
+		long sleepTime = 0;		
 		
 		loadGame();
 		
 		while(running) {
 			repaint();
 			frames++;
+			nextGameTick += skipTics;
+			sleepTime = nextGameTick - System.currentTimeMillis();
 			
-			//TODO Udìlat, aby se updatovaly každých napø. 40 framù
 			updateEnemy();
 			
+			// Update každou vteøinu
 			if(System.currentTimeMillis() - 1000 >= lastFrame) {
 				fps = frames;
 				lastFrame = System.currentTimeMillis();
 				frames = 0;
 			}
 			
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			if(sleepTime >= 0)
+				try {
+					Thread.sleep(sleepTime);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			
 		}
 		System.exit(0);
 	}
