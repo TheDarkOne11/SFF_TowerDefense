@@ -25,7 +25,7 @@ public class Enemy {
 	public double attackSpeed;
 	
 	public static final Enemy slime = new EnemySlime(EnemyVar.slimeId, EnemyVar.basicReward, EnemyVar.basicHealth, 
-			EnemyVar.basicDamage, EnemyVar.basicSpeed, EnemyVar.basicAttackSpeed).getTextureFile("EnemySlime");
+			EnemyVar.basicDamage, EnemyVar.basicSpeed*2, EnemyVar.basicAttackSpeed).getTextureFile("EnemySlime");
 	
 	public Enemy(int id, int reward, int health, int damage, double speed, double attackSpeed) {
 		if(enemyList[id] != null) {
