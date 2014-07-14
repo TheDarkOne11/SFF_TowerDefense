@@ -16,6 +16,10 @@ public class EnemyMove {
 	public double xPos, yPos;
 	/** Souøadnicová pozice ètverce, na kterém se nepøítel právì nachází. */
 	int routePosX, routePosY;
+	/** Ke které pozici v routePointList se tento nepøítel blíží. */
+	public int routePointNumber = 0;
+	/** Vzdálenost tohoto nepøítele od støedu ètverce. */
+	public double distanceToCenter;
 	
 	public boolean attack;
 	int health;

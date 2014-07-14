@@ -25,7 +25,7 @@ public class EnemyAI {
 	
 	public EnemyAI(int id) {
 		this.id = id;
-
+		
 		this.basePosX = enemyRoute.base.getX();
 		this.basePosY = enemyRoute.base.getY();
 	}
