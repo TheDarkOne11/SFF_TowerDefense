@@ -1,10 +1,10 @@
 package enemy;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import level.Base;
 import level.Level;
-import level.RouteCurves;
+import level.RoutePoint;
 import core.Screen;
 
 /** 
@@ -13,7 +13,7 @@ import core.Screen;
 public class EnemyRoute {
 	Level level;
 	int[][] route = new int[Screen.gridCountX][Screen.gridCountY];
-	ArrayList<RouteCurves> list = new ArrayList<RouteCurves>();
+	LinkedList<RoutePoint> routePointList = new LinkedList<RoutePoint>();
 	int baseID = 3;
 	Base base;
 	
@@ -36,6 +36,8 @@ public class EnemyRoute {
 		while(base == null) {
 			calculateNextPos();
 		}
+		
+		routePointList.addLast(new RoutePoint(base.getX(), base.getY()));
 	}
 	
 	/**
@@ -48,7 +50,7 @@ public class EnemyRoute {
 					if(level.map[this.xPos][(this.yPos - 1)] == 1) {
 						this.route[this.xPos][this.yPos] = UP;
 						if(lastPos != this.route[this.xPos][this.yPos]+1 && lastPos != -1) {
-							list.add(new RouteCurves(this.xPos, this.yPos));
+							routePointList.add(new RoutePoint(this.xPos, this.yPos));
 						}
 						
 						this.lastPos = DOWN;	// Když jsem šel nahoru, posl. pozice musí být dole
@@ -64,7 +66,7 @@ public class EnemyRoute {
 					if(level.map[this.xPos][(this.yPos + 1)] == 1) {
 						this.route[this.xPos][this.yPos] = DOWN;
 						if(lastPos != this.route[this.xPos][this.yPos]-1 && lastPos != -1) {
-							list.add(new RouteCurves(this.xPos, this.yPos));
+							routePointList.add(new RoutePoint(this.xPos, this.yPos));
 						}
 						
 						this.lastPos = UP;
@@ -80,7 +82,7 @@ public class EnemyRoute {
 					if(level.map[this.xPos - 1][this.yPos] == 1) {
 						this.route[this.xPos][this.yPos] = LEFT;
 						if(lastPos != this.route[this.xPos][this.yPos]-1 && lastPos != -1) {
-							list.add(new RouteCurves(this.xPos, this.yPos));
+							routePointList.add(new RoutePoint(this.xPos, this.yPos));
 						}
 						
 						this.lastPos = RIGHT;
@@ -96,7 +98,7 @@ public class EnemyRoute {
 					if(level.map[this.xPos + 1][this.yPos] == 1) {
 						this.route[this.xPos][this.yPos] = RIGHT;
 						if(lastPos != this.route[this.xPos][this.yPos]+1 && lastPos != -1) {
-							list.add(new RouteCurves(this.xPos, this.yPos));
+							routePointList.add(new RoutePoint(this.xPos, this.yPos));
 						}
 						
 						this.lastPos = LEFT;

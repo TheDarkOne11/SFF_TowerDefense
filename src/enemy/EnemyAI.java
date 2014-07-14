@@ -16,7 +16,7 @@ public class EnemyAI {
 	
 	public EnemyAI(Level level) {
 		enemyRoute = new EnemyRoute(level);
-
+		
 		this.basePosX = enemyRoute.base.getX();
 		this.basePosY = enemyRoute.base.getY();
 		

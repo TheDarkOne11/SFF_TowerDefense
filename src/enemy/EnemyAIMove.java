@@ -1,9 +1,5 @@
 package enemy;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import lib.EnemyVar;
 import core.Screen;
 
 /**
@@ -13,37 +9,40 @@ import core.Screen;
  */
 public class EnemyAIMove extends EnemyAI {
 	private double distanceToCenter;
+	private int routePointNumber = 0;
 	long time = System.currentTimeMillis();
 	
 	public EnemyAIMove(int id) {
 		super(id);
 	}
 	
-	/* Mìl bych to upravit tak, aby nepøítel musel zastavit uprostøed ètverce, jen pokud bude zatáèet.
-	 * Nemuseli by se tolik sekat. */
 	public void move(EnemyMove enemyMove) {
 		/*
 		 * Podmínka 1: Pokud je pøímo uprostøed ètverce (enemyMove.xPos % Screen.gridSize == 0).
 		 * Podmínka 2: Pokud již byla routePos updatována (enemyMove.routePosX == (int) (enemyMove.xPos/Screen.gridSize))
 		 */
 		if((int) enemyMove.xPos % Screen.gridSize == 0 && (int) enemyMove.yPos % Screen.gridSize == 0 && enemyMove.routePosX == (int) (enemyMove.xPos/Screen.gridSize) && enemyMove.routePosY == (int) (enemyMove.yPos/Screen.gridSize)) {
-			//System.out.println(enemyMove.routePosX + "/ " + enemyMove.routePosY + ": " + (System.currentTimeMillis() - time));
-			time = System.currentTimeMillis();
 			if(enemyMove.routePosX == super.basePosX && enemyMove.routePosY == super.basePosY) {
 				enemyMove.attack = true;
 			} else {
-				distanceToCenter = Screen.gridSize;
 				
-				if(enemyRoute.route[enemyMove.routePosX][enemyMove.routePosY] == enemyRoute.UP) {
-					enemyMove.routePosY--;
-				} else if(enemyRoute.route[enemyMove.routePosX][enemyMove.routePosY] == enemyRoute.DOWN) {
-					enemyMove.routePosY++;
-				} else if(enemyRoute.route[enemyMove.routePosX][enemyMove.routePosY] == enemyRoute.LEFT) {
-					enemyMove.routePosX--;
-				} else if(enemyRoute.route[enemyMove.routePosX][enemyMove.routePosY] == enemyRoute.RIGHT) {
-					enemyMove.routePosX++;
-				} else {
-					this.cantFindRoute();
+				if(routePointNumber <= enemyRoute.routePointList.size()) {
+					
+					if(enemyRoute.route[enemyMove.routePosX][enemyMove.routePosY] == enemyRoute.UP) {
+						distanceToCenter = Screen.gridSize*(enemyMove.routePosY-enemyRoute.routePointList.get(routePointNumber).getY());
+					} else if(enemyRoute.route[enemyMove.routePosX][enemyMove.routePosY] == enemyRoute.DOWN) {
+						distanceToCenter = Screen.gridSize*(enemyRoute.routePointList.get(routePointNumber).getY()-enemyMove.routePosY);
+					} else if(enemyRoute.route[enemyMove.routePosX][enemyMove.routePosY] == enemyRoute.LEFT) {
+						distanceToCenter = Screen.gridSize*(enemyMove.routePosX-enemyRoute.routePointList.get(routePointNumber).getX());
+					} else if(enemyRoute.route[enemyMove.routePosX][enemyMove.routePosY] == enemyRoute.RIGHT) {
+						distanceToCenter = Screen.gridSize*(enemyRoute.routePointList.get(routePointNumber).getX()-enemyMove.routePosX);
+					} else {
+						this.cantCountDistance();
+					}
+					
+					enemyMove.routePosX = enemyRoute.routePointList.get(routePointNumber).getX();
+					enemyMove.routePosY = enemyRoute.routePointList.get(routePointNumber).getY();
+					routePointNumber++;
 				}
 			}
 		} else {
@@ -65,7 +64,6 @@ public class EnemyAIMove extends EnemyAI {
 				enemyMove.xPos += enemyMove.enemy.speed;
 				this.distanceToCenter -= enemyMove.enemy.speed;
 			} else if(xPos < enemyMove.routePosX && this.distanceToCenter <= enemyMove.enemy.speed) {
-				//System.out.println("Screen.gridSize*enemyMove.routePosX-enemyMove.xPos: " + (Screen.gridSize*enemyMove.routePosX-enemyMove.xPos));
 				//System.out.println("enemyMove.xPos1: " + enemyMove.xPos);
 				enemyMove.xPos += Screen.gridSize*enemyMove.routePosX-enemyMove.xPos;
 				//System.out.println("enemyMove.xPos2: " + enemyMove.xPos + '\r');
@@ -87,7 +85,7 @@ public class EnemyAIMove extends EnemyAI {
 		}
 	}
 	
-	public void cantFindRoute() {
-		System.out.println("[EnemyAIMove] Can't find route.");
+	public void cantCountDistance() {
+		System.out.println("[EnemyAIMove] Can't count distance: " + this.distanceToCenter);
 	}
 }
