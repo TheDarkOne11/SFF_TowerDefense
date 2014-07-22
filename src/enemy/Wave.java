@@ -16,21 +16,23 @@ public class Wave {
 	
 	public Wave(Screen screen) {
 		this.screen = screen;
-		this.spawnRate /= screen.updatesPerSec;
+		this.spawnRate /= Screen.updatesPerSec;
 	}
 	
 	/**
 	 * Zaène další vlnu.
 	 */
 	public void nextWave() {
-		this.waveNumber++;
-		this.enemiesThisRound = 0;
-		isEnemySpawning = true;
-		
-		System.out.println("[Wave] " + waveNumber + ". wave spawning.");
-		
-		for(int i = 0; i < screen.enemyMap.length; i++) {
-			this.screen.enemyMap[i] = null;
+		if(screen.gameState == 1) {
+			this.waveNumber++;
+			this.enemiesThisRound = 0;
+			isEnemySpawning = true;
+			
+			System.out.println("[Wave] " + waveNumber + ". wave spawning.");
+			
+			for(int i = 0; i < screen.enemyMap.length; i++) {
+				this.screen.enemyMap[i] = null;
+			}
 		}
 	}
 	

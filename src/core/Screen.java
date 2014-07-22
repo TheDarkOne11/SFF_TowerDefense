@@ -4,19 +4,26 @@ import handlers.KeyHandler;
 import handlers.MouseHandler;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JTextField;
 
 import level.Level;
 import level.LevelFile;
+import levelMaker.MyButton;
 import tower.Tower;
-import additional_programs.LevelMaker;
 import enemy.Enemy;
 import enemy.EnemyAI;
 import enemy.EnemyMove;
@@ -52,6 +59,10 @@ public class Screen extends JPanel implements Runnable {
 	public int handYPos = 0;
 	public int handXPos = 0;
 	
+	// Game maker //TODO Fields
+	MyButton buttonUp_GridCountX, buttonDown_GridCountX, buttonUp_GridCountY, buttonDown_GridCountY;
+	String gridCountXStr, gridCountYStr;
+	
 	// Map and Levels
 		Level level;
 		LevelFile levelFile;
@@ -72,8 +83,10 @@ public class Screen extends JPanel implements Runnable {
 		EnemyAI enemyAI;
 	
 	/**
-	 * 0. Start 
-	 * 1. In Game */
+	 * 0. Menu 
+	 * 1. In Game 
+	 * 2. Level maker
+	 * */
 	public int gameState;
 	
 	/** Account */
@@ -93,7 +106,7 @@ public class Screen extends JPanel implements Runnable {
 		if(gameState == 0) {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
-		} else if(gameState == 1){			
+		} else if(gameState == 1) {		//TODO Game	
 			Screen.gridSize = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
 						
 			// Background
@@ -116,7 +129,7 @@ public class Screen extends JPanel implements Runnable {
 				}
 			}
 			
-			// Tower list
+			// Towers in shop grid
 			Screen.shopGridStartX = Screen.gridSize*6.5;
 			Screen.shopGridStartY = Screen.gridSize*(Screen.gridCountY + 1.25);
 			
@@ -128,7 +141,7 @@ public class Screen extends JPanel implements Runnable {
 					
 						// Zašedne vìž, pokud na ní není dostatek penìz
 						if(Tower.towerList[x*Screen.shopGridCountY + y].cost > this.user.player.money) {
-							g.setColor(new Color(68, 0, 68, 100));
+							g.setColor(new Color(68, 0, 68, 100));	// Grey
 							g.fillRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize);
 						}
 					
@@ -140,7 +153,7 @@ public class Screen extends JPanel implements Runnable {
 				}
 			}
 			
-			// Health and money
+				// Health and money
 				String health = "Health: " + user.player.health;
 				String money = "Money: " + user.player.money;
 					
@@ -152,27 +165,48 @@ public class Screen extends JPanel implements Runnable {
 				
 				// Tower scrool list num. 1
 				g.drawRect((int) (Screen.gridSize*5.25), (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize, (int) Screen.gridSize*Screen.shopGridCountY);
-		}
 		
-		// Umístìní vìže		
-		for(int x = 0; x < Screen.gridCountX; x++){
-			for(int y = 0; y < Screen.gridCountY; y++) {
-				if(towerMap[x][y] != null) {
-					int centerX = (int) gridSize + x*(int) gridSize - towerMap[x][y].range*(int) gridSize;
-					int centerY = (int) gridSize + y*(int) gridSize - towerMap[x][y].range*(int) gridSize;
-					
-					g.setColor(Color.gray);
-					g.drawOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
-					g.setColor(new Color(64, 64, 64, 64));
-					g.fillOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
-					g.drawImage(Tower.towerList[towerMap[x][y].id].texture, (int) gridSize + x*(int)gridSize, (int) gridSize + y*(int) gridSize, (int) gridSize, (int) gridSize, null);
+				// Umístìní vìže		
+				for(int x = 0; x < Screen.gridCountX; x++){
+					for(int y = 0; y < Screen.gridCountY; y++) {
+						if(towerMap[x][y] != null) {
+							int centerX = (int) gridSize + x*(int) gridSize - towerMap[x][y].range*(int) gridSize;
+							int centerY = (int) gridSize + y*(int) gridSize - towerMap[x][y].range*(int) gridSize;
+							
+							g.setColor(Color.gray);
+							g.drawOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
+							g.setColor(new Color(64, 64, 64, 64));
+							g.fillOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
+							g.drawImage(Tower.towerList[towerMap[x][y].id].texture, (int) gridSize + x*(int)gridSize, (int) gridSize + y*(int) gridSize, (int) gridSize, (int) gridSize, null);
+						}
+					}
 				}
-			}
-		}
-		
-		// HAND
-		if(hand != 0 && Tower.towerList[hand-1] != null) {
-			g.drawImage(Tower.towerList[hand-1].texture, this.handXPos - (int) Screen.gridSize/2, this.handYPos - (int) Screen.gridSize/2, (int) Screen.gridSize, (int) Screen.gridSize, null);
+				
+				// HAND
+				if(hand != 0 && Tower.towerList[hand-1] != null) {
+					g.drawImage(Tower.towerList[hand-1].texture, this.handXPos - (int) Screen.gridSize/2, this.handYPos - (int) Screen.gridSize/2, (int) Screen.gridSize, (int) Screen.gridSize, null);
+				}
+		} else if(gameState == 2) {	//TODO Game maker
+			int gridCountX = 25;	// 25
+			int gridCountY = 15;	// 15
+			gridCountXStr = "GridCountX: " + gridCountX;
+			gridCountYStr = "GridCountY: " + gridCountY;
+			
+			// Background
+			g.setColor(Color.GREEN);
+			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
+			
+			// MyButton buttons
+			g.drawImage(buttonUp_GridCountX.texture, buttonUp_GridCountX.x, buttonUp_GridCountX.y, null);
+			g.drawImage(buttonDown_GridCountX.texture, buttonDown_GridCountX.x, buttonDown_GridCountX.y, null);
+			
+			g.drawImage(buttonUp_GridCountY.texture, buttonUp_GridCountY.x, buttonUp_GridCountY.y, null);
+			g.drawImage(buttonDown_GridCountY.texture, buttonDown_GridCountY.x, buttonDown_GridCountY.y, null);
+			
+			// GridCountX a GridCountY strings
+			g.setColor(Color.BLACK);
+			g.drawString(gridCountXStr, buttonUp_GridCountX.x+50, buttonUp_GridCountX.y + buttonUp_GridCountX.height/2);
+			g.drawString(gridCountYStr, buttonUp_GridCountY.x+50, buttonUp_GridCountY.y + buttonUp_GridCountY.height/2);
 		}
 		
 		// FPS
@@ -214,6 +248,17 @@ public class Screen extends JPanel implements Runnable {
 		
 		this.gameState = 1;	// Level 1
 		this.wave.waveNumber = 0;
+	}
+	
+	public void startLevelMaker() {
+		int myButtonGap = 200;
+		buttonUp_GridCountX = new MyButton(this.frame.getWidth()-myButtonGap, 50, 30, 30).getTextureFile("ButtonUp");
+		buttonDown_GridCountX = new MyButton(this.frame.getWidth()-myButtonGap, 75, 30, 30).getTextureFile("ButtonDown");
+		
+		buttonUp_GridCountY = new MyButton(this.frame.getWidth()-myButtonGap, 125, 30, 30).getTextureFile("ButtonUp");
+		buttonDown_GridCountY = new MyButton(this.frame.getWidth()-myButtonGap, 150, 30, 30).getTextureFile("ButtonDown");
+		
+		this.gameState = 2;
 	}
 	
 	public void run() {
@@ -362,8 +407,7 @@ public class Screen extends JPanel implements Runnable {
 		}
 		
 		public void keyBACKSPACE() {
-			LevelMaker.testLevel();
-			startGame(user, "TestLevel");
+			startLevelMaker();
 		}
 		
 	}
