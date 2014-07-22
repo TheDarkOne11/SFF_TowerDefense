@@ -52,7 +52,7 @@ public class Screen extends JPanel implements Runnable {
 	public int handYPos = 0;
 	public int handXPos = 0;
 	
-	// Game maker //TODO Fields
+	// Game maker
 	/**
 	 * Tlaèítka:
 	 * 1/ Up = Pøidávájí 1 k hodnotì
@@ -69,7 +69,7 @@ public class Screen extends JPanel implements Runnable {
 		LevelFile levelFile;
 		
 		// Uloženy všechny hodnoty pozic gridu z LevelFile
-		public int[][] map = new int[gridCountX][gridCountY];
+		public int[][] map = new int[Screen.gridCountX][Screen.gridCountY];
 		
 		// Uloženy všechny hodnoty pozic vìží
 		public Tower[][] towerMap = new Tower[gridCountX][gridCountY];
@@ -101,27 +101,76 @@ public class Screen extends JPanel implements Runnable {
 		this.frame.addMouseMotionListener(new MouseHandler(this));
 	}
 	
+	// TODO Znovu upravit GridSize, aby mohl pružnì reagovat jak na zmìny GridCountX i GridCountY
+	public double getGridSize() {
+		return 0;
+	}
+	
+	public void drawGameGrid(Graphics g) {
+		g.setColor(Color.black);
+		for(int x = 0; x < gridCountX; x++) {
+			for(int y = 0; y < gridCountY; y++) {
+				g.drawImage(terrain[map[x][y]], (int) (Screen.gridSize + (x*Screen.gridSize)), (int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize, null);
+				g.drawRect((int) (Screen.gridSize + (x*Screen.gridSize)),(int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
+			}
+		}
+	}
+	
+	public void drawOtherGrids(Graphics g) {
+		// Towers in shop grid
+		Screen.shopGridStartX = Screen.gridSize*6.5;
+		Screen.shopGridStartY = Screen.gridSize*(Screen.gridCountY + 1.25);
+		
+		for(int x = 0; x < Screen.shopGridCountX; x++) {
+			for(int y = 0; y < Screen.shopGridCountY; y++) {
+				if(Tower.towerList[x*Screen.shopGridCountY + y] != null) {
+					// Tower Image
+					g.drawImage(Tower.towerList[x*Screen.shopGridCountY + y].texture,(int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize, null);
+				
+					// Zašedne vìž, pokud na ní není dostatek penìz
+					if(Tower.towerList[x*Screen.shopGridCountY + y].cost > this.user.player.money) {
+						g.setColor(new Color(68, 0, 68, 100));	// Grey
+						g.fillRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize);
+					}
+				
+				}
+				
+				// Shop grid
+				g.setColor(Color.black);
+				g.drawRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
+			}
+		}
+		
+		// Health and money
+		String health = "Health: " + user.player.health;
+		String money = "Money: " + user.player.money;
+			
+		g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
+		g.drawString(health, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(health)/2), (int) (Screen.gridSize*(Screen.gridCountY+1.75) + g.getFontMetrics().getHeight()/4));
+				
+		g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+2.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
+		g.drawString(money, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(money)/2), (int) (Screen.gridSize*(Screen.gridCountY+2.75) + g.getFontMetrics().getHeight()/4));
+		
+		// Tower scrool list num. 1
+		g.drawRect((int) (Screen.gridSize*5.25), (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize, (int) Screen.gridSize*Screen.shopGridCountY);
+		
+	}
+	
 	public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 		
 		if(gameState == 0) {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
-		} else if(gameState == 1) {		//TODO Game	
+		} else if(gameState == 1) {	
 			Screen.gridSize = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
 						
 			// Background
 			g.setColor(Color.GREEN);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 			
-			// Grid
-			g.setColor(Color.black);
-			for(int x = 0; x < gridCountX; x++) {
-				for(int y = 0; y < gridCountY; y++) {
-					g.drawImage(terrain[map[x][y]], (int) (Screen.gridSize + (x*Screen.gridSize)), (int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize, null);
-					g.drawRect((int) (Screen.gridSize + (x*Screen.gridSize)),(int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
-				}
-			}
+			drawGameGrid(g);
+			drawOtherGrids(g);
 			
 			// Enemy
 			for(int i = 0; i < this.enemyMap.length; i++) {
@@ -130,66 +179,32 @@ public class Screen extends JPanel implements Runnable {
 				}
 			}
 			
-			// Towers in shop grid
-			Screen.shopGridStartX = Screen.gridSize*6.5;
-			Screen.shopGridStartY = Screen.gridSize*(Screen.gridCountY + 1.25);
-			
-			for(int x = 0; x < Screen.shopGridCountX; x++) {
-				for(int y = 0; y < Screen.shopGridCountY; y++) {
-					if(Tower.towerList[x*Screen.shopGridCountY + y] != null) {
-						// Tower Image
-						g.drawImage(Tower.towerList[x*Screen.shopGridCountY + y].texture,(int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize, null);
-					
-						// Zašedne vìž, pokud na ní není dostatek penìz
-						if(Tower.towerList[x*Screen.shopGridCountY + y].cost > this.user.player.money) {
-							g.setColor(new Color(68, 0, 68, 100));	// Grey
-							g.fillRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize);
-						}
-					
+			// Umístìní vìže		
+			for(int x = 0; x < Screen.gridCountX; x++){
+				for(int y = 0; y < Screen.gridCountY; y++) {
+					if(towerMap[x][y] != null) {
+						int centerX = (int) gridSize + x*(int) gridSize - towerMap[x][y].range*(int) gridSize;
+						int centerY = (int) gridSize + y*(int) gridSize - towerMap[x][y].range*(int) gridSize;
+						
+						g.setColor(Color.gray);
+						g.drawOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
+						g.setColor(new Color(64, 64, 64, 64));
+						g.fillOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
+						g.drawImage(Tower.towerList[towerMap[x][y].id].texture, (int) gridSize + x*(int)gridSize, (int) gridSize + y*(int) gridSize, (int) gridSize, (int) gridSize, null);
 					}
-					
-					// Shop grid
-					g.setColor(Color.black);
-					g.drawRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
 				}
 			}
 			
-				// Health and money
-				String health = "Health: " + user.player.health;
-				String money = "Money: " + user.player.money;
-					
-				g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
-				g.drawString(health, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(health)/2), (int) (Screen.gridSize*(Screen.gridCountY+1.75) + g.getFontMetrics().getHeight()/4));
-						
-				g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+2.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
-				g.drawString(money, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(money)/2), (int) (Screen.gridSize*(Screen.gridCountY+2.75) + g.getFontMetrics().getHeight()/4));
-				
-				// Tower scrool list num. 1
-				g.drawRect((int) (Screen.gridSize*5.25), (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize, (int) Screen.gridSize*Screen.shopGridCountY);
-		
-				// Umístìní vìže		
-				for(int x = 0; x < Screen.gridCountX; x++){
-					for(int y = 0; y < Screen.gridCountY; y++) {
-						if(towerMap[x][y] != null) {
-							int centerX = (int) gridSize + x*(int) gridSize - towerMap[x][y].range*(int) gridSize;
-							int centerY = (int) gridSize + y*(int) gridSize - towerMap[x][y].range*(int) gridSize;
-							
-							g.setColor(Color.gray);
-							g.drawOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
-							g.setColor(new Color(64, 64, 64, 64));
-							g.fillOval(centerX, centerY, towerMap[x][y].range*2*(int) gridSize + (int) gridSize, towerMap[x][y].range*2*(int) gridSize + (int) gridSize);
-							g.drawImage(Tower.towerList[towerMap[x][y].id].texture, (int) gridSize + x*(int)gridSize, (int) gridSize + y*(int) gridSize, (int) gridSize, (int) gridSize, null);
-						}
-					}
-				}
-				
-				// HAND
-				if(hand != 0 && Tower.towerList[hand-1] != null) {
-					g.drawImage(Tower.towerList[hand-1].texture, this.handXPos - (int) Screen.gridSize/2, this.handYPos - (int) Screen.gridSize/2, (int) Screen.gridSize, (int) Screen.gridSize, null);
-				}
-		} else if(gameState == 2) {	//TODO Game maker
+			
+			// HAND
+			if(hand != 0 && Tower.towerList[hand-1] != null) {
+				g.drawImage(Tower.towerList[hand-1].texture, this.handXPos - (int) Screen.gridSize/2, this.handYPos - (int) Screen.gridSize/2, (int) Screen.gridSize, (int) Screen.gridSize, null);
+			}
+			
+		} else if(gameState == 2) {
 			gridCountXStr = "GridCountX: ";
 			gridCountYStr = "GridCountY: ";
+			Screen.gridSize = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
 			
 			// Background
 			g.setColor(Color.GREEN);
@@ -206,6 +221,9 @@ public class Screen extends JPanel implements Runnable {
 			g.setColor(Color.BLACK);
 			g.drawString(gridCountXStr + Screen.gridCountX, buttonUp_GCX.x+50, buttonUp_GCX.y + buttonUp_GCX.height/2);
 			g.drawString(gridCountYStr + Screen.gridCountY, buttonUp_GCY.x+50, buttonUp_GCY.y + buttonUp_GCY.height/2);
+			
+			drawGameGrid(g);
+			//drawOtherGrids(g);
 			
 		}
 		
@@ -252,6 +270,7 @@ public class Screen extends JPanel implements Runnable {
 	
 	public void startLevelMaker() {	
 		int myButtonGap = 200;
+		map = new int[100][100];
 		
 		buttonUp_GCX = new MyButton(this.frame.getWidth()-myButtonGap, 50, 30, 30, 1, gridCountX).getTextureFile("ButtonUp");
 		buttonDown_GCX = new MyButton(this.frame.getWidth()-myButtonGap, 75, 30, 30, -1, gridCountY).getTextureFile("ButtonDown");
@@ -379,7 +398,7 @@ public class Screen extends JPanel implements Runnable {
 				}
 			} else if(gameState == 2) { 
 				// GridCount buttons
-				if(e.getXOnScreen() >= buttonUp_GCX.x && e.getXOnScreen() <= buttonUp_GCX.x+buttonUp_GCX.width && e.getYOnScreen() >= buttonUp_GCX.y && e.getYOnScreen() <= buttonUp_GCX.y+buttonUp_GCX.height) {
+				if(e.getXOnScreen() >= buttonUp_GCX.x && e.getXOnScreen() <= buttonUp_GCX.x+buttonUp_GCX.width && e.getYOnScreen() >= buttonUp_GCX.y && e.getYOnScreen() <= buttonUp_GCX.y+buttonUp_GCX.height && Screen.gridCountX < map.length) {
 					Screen.gridCountX++;
 				}
 				
@@ -387,7 +406,7 @@ public class Screen extends JPanel implements Runnable {
 					Screen.gridCountX--;
 				}
 				
-				if(e.getXOnScreen() >= buttonUp_GCY.x && e.getXOnScreen() <= buttonUp_GCY.x+buttonUp_GCY.width && e.getYOnScreen() >= buttonUp_GCY.y && e.getYOnScreen() <= buttonUp_GCY.y+buttonUp_GCY.height) {
+				if(e.getXOnScreen() >= buttonUp_GCY.x && e.getXOnScreen() <= buttonUp_GCY.x+buttonUp_GCY.width && e.getYOnScreen() >= buttonUp_GCY.y && e.getYOnScreen() <= buttonUp_GCY.y+buttonUp_GCY.height && Screen.gridCountY < map[0].length) {
 					Screen.gridCountY++;
 				}
 				
