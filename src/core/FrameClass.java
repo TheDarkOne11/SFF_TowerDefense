@@ -30,6 +30,7 @@ public class FrameClass extends JFrame {
 		this.addWindowListener(new CloseWindow_WindowAdapter());
 		
 		Screen screen = new Screen(this);
+		
 		this.add(screen);
 	}
 	

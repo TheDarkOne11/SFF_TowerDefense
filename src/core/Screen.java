@@ -4,21 +4,14 @@ import handlers.KeyHandler;
 import handlers.MouseHandler;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JTextField;
 
 import level.Level;
 import level.LevelFile;
@@ -60,7 +53,15 @@ public class Screen extends JPanel implements Runnable {
 	public int handXPos = 0;
 	
 	// Game maker //TODO Fields
-	MyButton buttonUp_GridCountX, buttonDown_GridCountX, buttonUp_GridCountY, buttonDown_GridCountY;
+	/**
+	 * Tlaèítka:
+	 * 1/ Up = Pøidávájí 1 k hodnotì
+	 * 2/ Down = Ubírají 1 z hodnoty
+	 * 
+	 * GCX = GridCountX
+	 * GCY = GridCountY
+	 */
+	MyButton buttonUp_GCX, buttonDown_GCX, buttonUp_GCY, buttonDown_GCY;
 	String gridCountXStr, gridCountYStr;
 	
 	// Map and Levels
@@ -187,26 +188,25 @@ public class Screen extends JPanel implements Runnable {
 					g.drawImage(Tower.towerList[hand-1].texture, this.handXPos - (int) Screen.gridSize/2, this.handYPos - (int) Screen.gridSize/2, (int) Screen.gridSize, (int) Screen.gridSize, null);
 				}
 		} else if(gameState == 2) {	//TODO Game maker
-			int gridCountX = 25;	// 25
-			int gridCountY = 15;	// 15
-			gridCountXStr = "GridCountX: " + gridCountX;
-			gridCountYStr = "GridCountY: " + gridCountY;
+			gridCountXStr = "GridCountX: ";
+			gridCountYStr = "GridCountY: ";
 			
 			// Background
 			g.setColor(Color.GREEN);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 			
 			// MyButton buttons
-			g.drawImage(buttonUp_GridCountX.texture, buttonUp_GridCountX.x, buttonUp_GridCountX.y, null);
-			g.drawImage(buttonDown_GridCountX.texture, buttonDown_GridCountX.x, buttonDown_GridCountX.y, null);
+			g.drawImage(buttonUp_GCX.texture, buttonUp_GCX.x, buttonUp_GCX.y, null);
+			g.drawImage(buttonDown_GCX.texture, buttonDown_GCX.x, buttonDown_GCX.y, null);
 			
-			g.drawImage(buttonUp_GridCountY.texture, buttonUp_GridCountY.x, buttonUp_GridCountY.y, null);
-			g.drawImage(buttonDown_GridCountY.texture, buttonDown_GridCountY.x, buttonDown_GridCountY.y, null);
+			g.drawImage(buttonUp_GCY.texture, buttonUp_GCY.x, buttonUp_GCY.y, null);
+			g.drawImage(buttonDown_GCY.texture, buttonDown_GCY.x, buttonDown_GCY.y, null);
 			
 			// GridCountX a GridCountY strings
 			g.setColor(Color.BLACK);
-			g.drawString(gridCountXStr, buttonUp_GridCountX.x+50, buttonUp_GridCountX.y + buttonUp_GridCountX.height/2);
-			g.drawString(gridCountYStr, buttonUp_GridCountY.x+50, buttonUp_GridCountY.y + buttonUp_GridCountY.height/2);
+			g.drawString(gridCountXStr + Screen.gridCountX, buttonUp_GCX.x+50, buttonUp_GCX.y + buttonUp_GCX.height/2);
+			g.drawString(gridCountYStr + Screen.gridCountY, buttonUp_GCY.x+50, buttonUp_GCY.y + buttonUp_GCY.height/2);
+			
 		}
 		
 		// FPS
@@ -250,13 +250,14 @@ public class Screen extends JPanel implements Runnable {
 		this.wave.waveNumber = 0;
 	}
 	
-	public void startLevelMaker() {
+	public void startLevelMaker() {	
 		int myButtonGap = 200;
-		buttonUp_GridCountX = new MyButton(this.frame.getWidth()-myButtonGap, 50, 30, 30).getTextureFile("ButtonUp");
-		buttonDown_GridCountX = new MyButton(this.frame.getWidth()-myButtonGap, 75, 30, 30).getTextureFile("ButtonDown");
 		
-		buttonUp_GridCountY = new MyButton(this.frame.getWidth()-myButtonGap, 125, 30, 30).getTextureFile("ButtonUp");
-		buttonDown_GridCountY = new MyButton(this.frame.getWidth()-myButtonGap, 150, 30, 30).getTextureFile("ButtonDown");
+		buttonUp_GCX = new MyButton(this.frame.getWidth()-myButtonGap, 50, 30, 30, 1, gridCountX).getTextureFile("ButtonUp");
+		buttonDown_GCX = new MyButton(this.frame.getWidth()-myButtonGap, 75, 30, 30, -1, gridCountY).getTextureFile("ButtonDown");
+		
+		buttonUp_GCY = new MyButton(this.frame.getWidth()-myButtonGap, 125, 30, 30, 1, gridCountX).getTextureFile("ButtonUp");
+		buttonDown_GCY = new MyButton(this.frame.getWidth()-myButtonGap, 150, 30, 30, -1, gridCountY).getTextureFile("ButtonDown");
 		
 		this.gameState = 2;
 	}
@@ -375,6 +376,23 @@ public class Screen extends JPanel implements Runnable {
 							}
 						}
 					}
+				}
+			} else if(gameState == 2) { 
+				// GridCount buttons
+				if(e.getXOnScreen() >= buttonUp_GCX.x && e.getXOnScreen() <= buttonUp_GCX.x+buttonUp_GCX.width && e.getYOnScreen() >= buttonUp_GCX.y && e.getYOnScreen() <= buttonUp_GCX.y+buttonUp_GCX.height) {
+					Screen.gridCountX++;
+				}
+				
+				if(e.getXOnScreen() >= buttonDown_GCX.x && e.getXOnScreen() <= buttonDown_GCX.x+buttonDown_GCX.width && e.getYOnScreen() >= buttonDown_GCX.y && e.getYOnScreen() <= buttonDown_GCX.y+buttonDown_GCX.height && Screen.gridCountX > 0) {
+					Screen.gridCountX--;
+				}
+				
+				if(e.getXOnScreen() >= buttonUp_GCY.x && e.getXOnScreen() <= buttonUp_GCY.x+buttonUp_GCY.width && e.getYOnScreen() >= buttonUp_GCY.y && e.getYOnScreen() <= buttonUp_GCY.y+buttonUp_GCY.height) {
+					Screen.gridCountY++;
+				}
+				
+				if(e.getXOnScreen() >= buttonDown_GCY.x && e.getXOnScreen() <= buttonDown_GCY.x+buttonDown_GCY.width && e.getYOnScreen() >= buttonDown_GCY.y && e.getYOnScreen() <= buttonDown_GCY.y+buttonDown_GCY.height && Screen.gridCountY > 0) {
+					Screen.gridCountY--;
 				}
 			}
 		}
