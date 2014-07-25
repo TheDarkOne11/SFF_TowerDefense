@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+/** Tlaèítko na manipulaci s GridCount hodnotami ve Screenu. */
 public class MyButton {
 	public int x;
 	public int y;

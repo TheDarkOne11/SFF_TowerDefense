@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 import level.Level;
 import level.LevelFile;
-import levelMaker.MyButton;
+import levelMaker.LevelMaker;
 import tower.Tower;
 import enemy.Enemy;
 import enemy.EnemyAI;
@@ -34,45 +34,36 @@ public class Screen extends JPanel implements Runnable {
 	boolean running;
 	
 	// Main Grid
-	public static int gridCountX = 25;	// 25
-	public static int gridCountY = 15;	// 15
-	/* Velikost x a y je stejná*/
-	public static double gridSize = 1;
+		public static int gridCountX = 25;	// 25
+		public static int gridCountY = 15;	// 15
+		/* Velikost x a y je stejná*/
+		public static double gridSize = 1;
 	
 	// Shop Grid
-	public static double shopGridStartX, shopGridStartY;
-	public static int shopGridCountX = 20;
-	public static int shopGridCountY = 2;
+		public static double shopGridStartX, shopGridStartY;
+		public static int shopGridCountX = 20;
+		public static int shopGridCountY = 2;
 
 	// Mouse
-	/**
-	 * 1 = vìž v ruce
-	 */
-	public int hand = 0;
-	public int handYPos = 0;
-	public int handXPos = 0;
+		/**
+		 * 1 = vìž v ruce
+		 */
+		public int hand = 0;
+		public int handYPos = 0;
+		public int handXPos = 0;
 	
-	// Game maker
-	/**
-	 * Tlaèítka:
-	 * 1/ Up = Pøidávájí 1 k hodnotì
-	 * 2/ Down = Ubírají 1 z hodnoty
-	 * 
-	 * GCX = GridCountX
-	 * GCY = GridCountY
-	 */
-	MyButton buttonUp_GCX, buttonDown_GCX, buttonUp_GCY, buttonDown_GCY;
-	String gridCountXStr, gridCountYStr;
+	// Level maker
+		LevelMaker levelMaker;
 	
 	// Map and Levels
 		Level level;
 		LevelFile levelFile;
 		
 		// Uloženy všechny hodnoty pozic gridu z LevelFile
-		public int[][] map = new int[Screen.gridCountX][Screen.gridCountY];
+		public int[][] map;
 		
 		// Uloženy všechny hodnoty pozic vìží
-		public Tower[][] towerMap = new Tower[gridCountX][gridCountY];
+		public Tower[][] towerMap;
 		public Image[] terrain = new Image[100];
 		String packageName = "core";
 		
@@ -84,14 +75,14 @@ public class Screen extends JPanel implements Runnable {
 		EnemyAI enemyAI;
 	
 	/**
-	 * 0. Menu 
-	 * 1. In Game 
+	 * 0. Menu
+	 * 1. In Game
 	 * 2. Level maker
 	 * */
 	public int gameState;
 	
 	/** Account */
-	User user;
+	private User user;
 	
 	public Screen(FrameClass frame) {
 		thread.start();	// Zaène run()
@@ -99,11 +90,6 @@ public class Screen extends JPanel implements Runnable {
 		this.frame.addKeyListener(new KeyHandler(this));
 		this.frame.addMouseListener(new MouseHandler(this));
 		this.frame.addMouseMotionListener(new MouseHandler(this));
-	}
-	
-	// TODO Znovu upravit GridSize, aby mohl pružnì reagovat jak na zmìny GridCountX i GridCountY
-	public double getGridSize() {
-		return 0;
 	}
 	
 	public void drawGameGrid(Graphics g) {
@@ -116,7 +102,7 @@ public class Screen extends JPanel implements Runnable {
 		}
 	}
 	
-	public void drawOtherGrids(Graphics g) {
+	public void drawPlayerGrid(Graphics g) {
 		// Towers in shop grid
 		Screen.shopGridStartX = Screen.gridSize*6.5;
 		Screen.shopGridStartY = Screen.gridSize*(Screen.gridCountY + 1.25);
@@ -163,14 +149,13 @@ public class Screen extends JPanel implements Runnable {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 		} else if(gameState == 1) {	
-			Screen.gridSize = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
 						
 			// Background
 			g.setColor(Color.GREEN);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 			
 			drawGameGrid(g);
-			drawOtherGrids(g);
+			drawPlayerGrid(g);
 			
 			// Enemy
 			for(int i = 0; i < this.enemyMap.length; i++) {
@@ -202,29 +187,19 @@ public class Screen extends JPanel implements Runnable {
 			}
 			
 		} else if(gameState == 2) {
-			gridCountXStr = "GridCountX: ";
-			gridCountYStr = "GridCountY: ";
-			Screen.gridSize = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
+			double height = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
+			double width = this.getWidth() / (Screen.gridCountX + 6);
+			Screen.gridSize = height < width ? height : width;
 			
 			// Background
 			g.setColor(Color.GREEN);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 			
-			// MyButton buttons
-			g.drawImage(buttonUp_GCX.texture, buttonUp_GCX.x, buttonUp_GCX.y, null);
-			g.drawImage(buttonDown_GCX.texture, buttonDown_GCX.x, buttonDown_GCX.y, null);
-			
-			g.drawImage(buttonUp_GCY.texture, buttonUp_GCY.x, buttonUp_GCY.y, null);
-			g.drawImage(buttonDown_GCY.texture, buttonDown_GCY.x, buttonDown_GCY.y, null);
-			
-			// GridCountX a GridCountY strings
-			g.setColor(Color.BLACK);
-			g.drawString(gridCountXStr + Screen.gridCountX, buttonUp_GCX.x+50, buttonUp_GCX.y + buttonUp_GCX.height/2);
-			g.drawString(gridCountYStr + Screen.gridCountY, buttonUp_GCY.x+50, buttonUp_GCY.y + buttonUp_GCY.height/2);
-			
 			drawGameGrid(g);
-			//drawOtherGrids(g);
-			
+			drawPlayerGrid(g);
+			levelMaker.drawGridCountButtons(g);
+			levelMaker.drawTerrainMenu(g);
+
 		}
 		
 		// FPS
@@ -259,25 +234,29 @@ public class Screen extends JPanel implements Runnable {
 	 */
 	public void startGame(User user, String levelName) {
 		user.createPlayer();
+		map = new int[Screen.gridCountX][Screen.gridCountY];
+		towerMap = new Tower[gridCountX][gridCountY];
 		this.level = levelFile.getLevel(levelName);
 		this.level.FindSpawnPoint();
 		this.map = this.level.map;
 		this.enemyAI = new EnemyAI(this.level);
 		
+		double height = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
+		double width = this.getWidth() / (Screen.gridCountX + 6);
+		Screen.gridSize = height < width ? height : width;
+		
 		this.gameState = 1;	// Level 1
 		this.wave.waveNumber = 0;
 	}
 	
-	public void startLevelMaker() {	
-		int myButtonGap = 200;
+	public void startLevelMaker(User user) {	
 		map = new int[100][100];
+		user.createPlayer();
+		double height = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
+		double width = this.getWidth() / (Screen.gridCountX + 6);
+		Screen.gridSize = height < width ? height : width;
 		
-		buttonUp_GCX = new MyButton(this.frame.getWidth()-myButtonGap, 50, 30, 30, 1, gridCountX).getTextureFile("ButtonUp");
-		buttonDown_GCX = new MyButton(this.frame.getWidth()-myButtonGap, 75, 30, 30, -1, gridCountY).getTextureFile("ButtonDown");
-		
-		buttonUp_GCY = new MyButton(this.frame.getWidth()-myButtonGap, 125, 30, 30, 1, gridCountX).getTextureFile("ButtonUp");
-		buttonDown_GCY = new MyButton(this.frame.getWidth()-myButtonGap, 150, 30, 30, -1, gridCountY).getTextureFile("ButtonDown");
-		
+		levelMaker = new LevelMaker(this);
 		this.gameState = 2;
 	}
 	
@@ -398,21 +377,7 @@ public class Screen extends JPanel implements Runnable {
 				}
 			} else if(gameState == 2) { 
 				// GridCount buttons
-				if(e.getXOnScreen() >= buttonUp_GCX.x && e.getXOnScreen() <= buttonUp_GCX.x+buttonUp_GCX.width && e.getYOnScreen() >= buttonUp_GCX.y && e.getYOnScreen() <= buttonUp_GCX.y+buttonUp_GCX.height && Screen.gridCountX < map.length) {
-					Screen.gridCountX++;
-				}
-				
-				if(e.getXOnScreen() >= buttonDown_GCX.x && e.getXOnScreen() <= buttonDown_GCX.x+buttonDown_GCX.width && e.getYOnScreen() >= buttonDown_GCX.y && e.getYOnScreen() <= buttonDown_GCX.y+buttonDown_GCX.height && Screen.gridCountX > 0) {
-					Screen.gridCountX--;
-				}
-				
-				if(e.getXOnScreen() >= buttonUp_GCY.x && e.getXOnScreen() <= buttonUp_GCY.x+buttonUp_GCY.width && e.getYOnScreen() >= buttonUp_GCY.y && e.getYOnScreen() <= buttonUp_GCY.y+buttonUp_GCY.height && Screen.gridCountY < map[0].length) {
-					Screen.gridCountY++;
-				}
-				
-				if(e.getXOnScreen() >= buttonDown_GCY.x && e.getXOnScreen() <= buttonDown_GCY.x+buttonDown_GCY.width && e.getYOnScreen() >= buttonDown_GCY.y && e.getYOnScreen() <= buttonDown_GCY.y+buttonDown_GCY.height && Screen.gridCountY > 0) {
-					Screen.gridCountY--;
-				}
+				levelMaker.clickGridCountButton(e);
 			}
 		}
 		
@@ -444,7 +409,7 @@ public class Screen extends JPanel implements Runnable {
 		}
 		
 		public void keyBACKSPACE() {
-			startLevelMaker();
+			startLevelMaker(user);
 		}
 		
 	}
