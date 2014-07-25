@@ -3,7 +3,6 @@ package levelMaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.image.ImageObserver;
 
 import core.Screen;
 
@@ -55,6 +54,11 @@ public class LevelMaker {
 		g.setColor(Color.BLACK);
 		g.drawString(gridCountXStr + Screen.gridCountX, buttonUp_GCX.x+50, buttonUp_GCX.y + buttonUp_GCX.height/2);
 		g.drawString(gridCountYStr + Screen.gridCountY, buttonUp_GCY.x+50, buttonUp_GCY.y + buttonUp_GCY.height/2);
+	}
+	
+	//TODO Buï vložit terrain image do ruky nebo vytvoøit oznaèování ve gridu a kliknutím dát daný terrain image na pøíslušné místo
+	public void clickTerrainImage(MouseEvent e) { 
+		
 	}
 	
 	public void clickGridCountButton(MouseEvent e) {
