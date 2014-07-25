@@ -3,6 +3,7 @@ package levelMaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+import java.awt.image.ImageObserver;
 
 import core.Screen;
 
@@ -23,7 +24,7 @@ public class LevelMaker {
 		this.screen = screen;
 		gridCountXStr = "GridCountX: ";
 		gridCountYStr = "GridCountY: ";
-				
+		
 		buttonUp_GCX = new MyButton((int) ((Screen.gridCountX+2)*Screen.gridSize), (int) Screen.gridSize, 30, 30, 1, Screen.gridCountX).getTextureFile("ButtonUp");
 		buttonDown_GCX = new MyButton((int) ((Screen.gridCountX+2)*Screen.gridSize), (int) (Screen.gridSize*2), 30, 30, -1, Screen.gridCountY).getTextureFile("ButtonDown");
 		
@@ -34,7 +35,11 @@ public class LevelMaker {
 	
 	public void drawTerrainMenu(Graphics g) {
 		for(int i = 0; i < screen.terrain.length; i++) {
-			g.drawImage(screen.terrain[i], (int) ((Screen.gridCountX+2)*Screen.gridSize), (int) (Screen.gridSize*(6+i)), (int) Screen.gridSize, (int) Screen.gridSize, null);
+			if(screen.terrain[i] != null) {
+				System.out.println(screen.terrain[i].toString());
+				g.drawImage(screen.terrain[i], (int) ((Screen.gridCountX+2)*Screen.gridSize), (int) (Screen.gridSize*(6+i)), (int) Screen.gridSize, (int) Screen.gridSize, null);
+				g.drawRect((int) ((Screen.gridCountX+2)*Screen.gridSize), (int) (Screen.gridSize*(6+i)), (int) Screen.gridSize, (int) Screen.gridSize);
+			}
 		}
 	}
 	
