@@ -5,11 +5,17 @@ import handlers.MouseHandler;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.awt.image.CropImageFilter;
+import java.awt.image.DataBufferByte;
 import java.awt.image.FilteredImageSource;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -65,7 +71,7 @@ public class Screen extends JPanel implements Runnable {
 		// Uloženy všechny hodnoty pozic vìží
 		public Tower[][] towerMap;
 		public Image[] terrain = new Image[100];
-		String packageName = "core";
+		String packageName = this.getClass().getPackage().getName();
 		
 	// Enemy
 		/** Kolik nepøátel na mapì je na mapì v jednu chvíli. */
@@ -207,21 +213,44 @@ public class Screen extends JPanel implements Runnable {
 		g.drawString(fps + "", 10, 10);
 	}
 	
+	private boolean isImageEmpty(BufferedImage img, int xPos, int yPos) {
+		Color emptyColor = new Color(255, 255, 255, 0);
+		Color currentColor = new Color(img.getRGB(xPos, yPos), true);
+		
+		return emptyColor.equals(currentColor);
+	}
+
 	/**
 	 * Naète základní vìci.
+	 * @throws IOException 
 	 */
 	public void loadGame() {
 		user = new User(this);
 		levelFile = new LevelFile();
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		wave = new Wave(this);
+		BufferedImage terrainBufferedImage;
 		
+		try {
+			terrainBufferedImage = ImageIO.read(classLoader.getResource(packageName + "/terrain.png"));
+		
+		//TODO Nìjak zkusit udìlat, aby se do terrain uložily jen neprázdné obrázky.
+		//TODO Upravit terrain na LinkedList
 		// Pøeète terrain soubor, získá typy prostøedí.
 		for(int y = 0; y < 10; y++) {
 			for(int x = 0; x < 10; x++) {	// terrain.png je 250*250 pixelù, jeden typ krajiny je 25*25 pixelù
 				terrain[x + y*10] = new ImageIcon(classLoader.getResource(packageName + "/terrain.png")).getImage();
-				terrain[x + y*10] = createImage(new FilteredImageSource(terrain[x + y*10].getSource(), new CropImageFilter(x*25, y*25, 25, 25)));	// 25 je 1 pixel v Paint.Net
+				terrain[x + y*10] = createImage(new FilteredImageSource(terrain[x + y*10].getSource(), new CropImageFilter(x*25, y*25, 25, 25)));	// 25 je 1 pixel v Paint.Net				
+				
+				// Checks 4 points if image is empty 
+				if(isImageEmpty(terrainBufferedImage, x*25, y*25) && isImageEmpty(terrainBufferedImage, x*25+9, y*25+9) && isImageEmpty(terrainBufferedImage, x*25+12, y*25+12) && isImageEmpty(terrainBufferedImage, x*25+19, y*25+19)) {
+					terrain[x + y*10] = null;
+				}
 			}
+		}
+		
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		running = true;

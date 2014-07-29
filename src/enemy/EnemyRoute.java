@@ -52,7 +52,7 @@ public class EnemyRoute {
 						if(lastPos != this.route[this.xPos][this.yPos]+1 && lastPos != -1) {
 							routePointList.add(new RoutePoint(this.xPos, this.yPos));
 						}
-						
+
 						this.lastPos = DOWN;	// Když jsem šel nahoru, posl. pozice musí být dole
 						this.yPos--;
 						break;
