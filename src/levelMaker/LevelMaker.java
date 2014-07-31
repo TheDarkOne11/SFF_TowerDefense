@@ -31,7 +31,7 @@ public class LevelMaker {
 		buttonDown_GCY = new MyButton((int) ((Screen.gridCountX+2)*Screen.gridSize), (int) (Screen.gridSize*5), 30, 30, -1, Screen.gridCountY).getTextureFile("ButtonDown");
 		
 	}
-	//TODO Vytvoøit více sloupcù
+	//TODO Vytvoøit více sloupcù, až vytvoøím pro každou krajinu objekt
 	public void drawTerrainMenu(Graphics g) {
 		for(int i = 0; i < screen.terrain.length; i++) {
 			if(screen.terrain[i] != null) {

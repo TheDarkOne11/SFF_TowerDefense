@@ -2,9 +2,9 @@ package enemy;
 
 import java.util.LinkedList;
 
-import level.Base;
 import level.Level;
 import level.RoutePoint;
+import level.terrain.Base;
 import core.Screen;
 
 /** 

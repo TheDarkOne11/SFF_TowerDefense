@@ -5,13 +5,10 @@ import handlers.MouseHandler;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.CropImageFilter;
-import java.awt.image.DataBufferByte;
 import java.awt.image.FilteredImageSource;
 import java.io.IOException;
 
@@ -98,56 +95,6 @@ public class Screen extends JPanel implements Runnable {
 		this.frame.addMouseMotionListener(new MouseHandler(this));
 	}
 	
-	public void drawGameGrid(Graphics g) {
-		g.setColor(Color.black);
-		for(int x = 0; x < gridCountX; x++) {
-			for(int y = 0; y < gridCountY; y++) {
-				g.drawImage(terrain[map[x][y]], (int) (Screen.gridSize + (x*Screen.gridSize)), (int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize, null);
-				g.drawRect((int) (Screen.gridSize + (x*Screen.gridSize)),(int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
-			}
-		}
-	}
-	
-	public void drawPlayerGrid(Graphics g) {
-		// Towers in shop grid
-		Screen.shopGridStartX = Screen.gridSize*6.5;
-		Screen.shopGridStartY = Screen.gridSize*(Screen.gridCountY + 1.25);
-		
-		for(int x = 0; x < Screen.shopGridCountX; x++) {
-			for(int y = 0; y < Screen.shopGridCountY; y++) {
-				if(Tower.towerList[x*Screen.shopGridCountY + y] != null) {
-					// Tower Image
-					g.drawImage(Tower.towerList[x*Screen.shopGridCountY + y].texture,(int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize, null);
-				
-					// Zašedne vìž, pokud na ní není dostatek penìz
-					if(Tower.towerList[x*Screen.shopGridCountY + y].cost > this.user.player.money) {
-						g.setColor(new Color(68, 0, 68, 100));	// Grey
-						g.fillRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize);
-					}
-				
-				}
-				
-				// Shop grid
-				g.setColor(Color.black);
-				g.drawRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
-			}
-		}
-		
-		// Health and money
-		String health = "Health: " + user.player.health;
-		String money = "Money: " + user.player.money;
-			
-		g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
-		g.drawString(health, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(health)/2), (int) (Screen.gridSize*(Screen.gridCountY+1.75) + g.getFontMetrics().getHeight()/4));
-				
-		g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+2.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
-		g.drawString(money, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(money)/2), (int) (Screen.gridSize*(Screen.gridCountY+2.75) + g.getFontMetrics().getHeight()/4));
-		
-		// Tower scrool list num. 1
-		g.drawRect((int) (Screen.gridSize*5.25), (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize, (int) Screen.gridSize*Screen.shopGridCountY);
-		
-	}
-	
 	public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 		
@@ -205,21 +152,64 @@ public class Screen extends JPanel implements Runnable {
 			drawPlayerGrid(g);
 			levelMaker.drawGridCountButtons(g);
 			levelMaker.drawTerrainMenu(g);
-
+	
 		}
 		
 		// FPS
 		g.setColor(Color.black);
 		g.drawString(fps + "", 10, 10);
 	}
-	
-	private boolean isImageEmpty(BufferedImage img, int xPos, int yPos) {
-		Color emptyColor = new Color(255, 255, 255, 0);
-		Color currentColor = new Color(img.getRGB(xPos, yPos), true);
-		
-		return emptyColor.equals(currentColor);
-	}
 
+	public void drawGameGrid(Graphics g) {
+		g.setColor(Color.black);
+		for(int x = 0; x < gridCountX; x++) {
+			for(int y = 0; y < gridCountY; y++) {
+				g.drawImage(terrain[map[x][y]], (int) (Screen.gridSize + (x*Screen.gridSize)), (int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize, null);
+				g.drawRect((int) (Screen.gridSize + (x*Screen.gridSize)),(int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
+			}
+		}
+	}
+	
+	public void drawPlayerGrid(Graphics g) {
+		// Towers in shop grid
+		Screen.shopGridStartX = Screen.gridSize*6.5;
+		Screen.shopGridStartY = Screen.gridSize*(Screen.gridCountY + 1.25);
+		
+		for(int x = 0; x < Screen.shopGridCountX; x++) {
+			for(int y = 0; y < Screen.shopGridCountY; y++) {
+				if(Tower.towerList[x*Screen.shopGridCountY + y] != null) {
+					// Tower Image
+					g.drawImage(Tower.towerList[x*Screen.shopGridCountY + y].texture,(int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize, null);
+				
+					// Zašedne vìž, pokud na ní není dostatek penìz
+					if(Tower.towerList[x*Screen.shopGridCountY + y].cost > this.user.player.money) {
+						g.setColor(new Color(68, 0, 68, 100));	// Grey
+						g.fillRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)), (int) gridSize, (int) gridSize);
+					}
+				
+				}
+				
+				// Shop grid
+				g.setColor(Color.black);
+				g.drawRect((int) (Screen.shopGridStartX + (x*Screen.gridSize)),(int) (Screen.shopGridStartY + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
+			}
+		}
+		
+		// Health and money
+		String health = "Health: " + user.player.health;
+		String money = "Money: " + user.player.money;
+			
+		g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
+		g.drawString(health, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(health)/2), (int) (Screen.gridSize*(Screen.gridCountY+1.75) + g.getFontMetrics().getHeight()/4));
+				
+		g.drawRect((int) Screen.gridSize, (int) (Screen.gridSize*(Screen.gridCountY+2.25)), (int) Screen.gridSize*4, (int) Screen.gridSize);
+		g.drawString(money, (int) (Screen.gridSize*3 - g.getFontMetrics().stringWidth(money)/2), (int) (Screen.gridSize*(Screen.gridCountY+2.75) + g.getFontMetrics().getHeight()/4));
+		
+		// Tower scrool list num. 1
+		g.drawRect((int) (Screen.gridSize*5.25), (int) (Screen.gridSize*(Screen.gridCountY+1.25)), (int) Screen.gridSize, (int) Screen.gridSize*Screen.shopGridCountY);
+		
+	}
+	
 	/**
 	 * Naète základní vìci.
 	 * @throws IOException 
@@ -235,7 +225,6 @@ public class Screen extends JPanel implements Runnable {
 			terrainBufferedImage = ImageIO.read(classLoader.getResource(packageName + "/terrain.png"));
 		
 		//TODO Nìjak zkusit udìlat, aby se do terrain uložily jen neprázdné obrázky.
-		//TODO Upravit terrain na LinkedList
 		// Pøeète terrain soubor, získá typy prostøedí.
 		for(int y = 0; y < 10; y++) {
 			for(int x = 0; x < 10; x++) {	// terrain.png je 250*250 pixelù, jeden typ krajiny je 25*25 pixelù
@@ -255,7 +244,14 @@ public class Screen extends JPanel implements Runnable {
 		
 		running = true;
 	}
-	
+
+	private boolean isImageEmpty(BufferedImage img, int xPos, int yPos) {
+		Color emptyColor = new Color(255, 255, 255, 0);
+		Color currentColor = new Color(img.getRGB(xPos, yPos), true);
+		
+		return emptyColor.equals(currentColor);
+	}
+
 	/**
 	 * Zaène samotné hraní, naète mapu, vìže, nepøátele atd.
 	 * @param user
