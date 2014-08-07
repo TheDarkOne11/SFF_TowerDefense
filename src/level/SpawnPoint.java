@@ -1,13 +1,11 @@
-package level.terrain;
+package level;
 
 /**
  * Poèáteèní místo nepøátel.
  * @author Petr
  *
  */
-public class SpawnPoint implements TerrainInterface {
-	public int id = 2;
-	public boolean isWalkable = true;
+public class SpawnPoint {
 	private int xPos;
 	private int yPos;
 	
@@ -15,17 +13,13 @@ public class SpawnPoint implements TerrainInterface {
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}
-	
+
 	public int getX() {
 		return xPos;
 	}
 
 	public int getY() {
 		return yPos;
-	}
-
-	public void getTextureFile() {
-		
 	}
 
 }

@@ -8,6 +8,8 @@ import core.Screen;
 
 public class LevelMaker {
 	Screen screen;
+	public int gridCountX = 25;
+	public int gridCountY = 15;
 	/**
 	 * Tlaèítka:
 	 * 1/ Up = Pøidávájí 1 k hodnotì

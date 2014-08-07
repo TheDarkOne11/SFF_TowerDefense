@@ -1,6 +1,6 @@
 package enemy;
 
-import level.terrain.SpawnPoint;
+import level.SpawnPoint;
 import core.Screen;
 
 /**

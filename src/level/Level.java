@@ -1,6 +1,5 @@
 package level;
 
-import level.terrain.SpawnPoint;
 
 /**
  * Data o levelu. Uložena mapa a spawnpoint.

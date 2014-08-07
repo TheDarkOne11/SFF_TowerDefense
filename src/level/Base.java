@@ -1,13 +1,11 @@
-package level.terrain;
+package level;
 
 /**
  * Základna, kam se snaží dostat nepøátelé.
  * @author Petr
  *
  */
-public class Base implements TerrainInterface {
-	public int id = 3;
-	public boolean isWalkable = true;
+public class Base {
 	private int xPos;
 	private int yPos;
 	
@@ -23,9 +21,5 @@ public class Base implements TerrainInterface {
 	public int getY() {
 		return yPos;
 	}
-
-	public void getTextureFile() {
-		
-	}
-
+	
 }
