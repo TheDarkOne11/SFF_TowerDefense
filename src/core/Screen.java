@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -67,7 +68,7 @@ public class Screen extends JPanel implements Runnable {
 		
 		// Uloženy všechny hodnoty pozic vìží
 		public Tower[][] towerMap;
-		public Image[] terrain = new Image[100];
+		public LinkedList<Image> terrain = new LinkedList<Image>();
 		String packageName = this.getClass().getPackage().getName();
 		
 	// Enemy
@@ -164,7 +165,7 @@ public class Screen extends JPanel implements Runnable {
 		g.setColor(Color.black);
 		for(int x = 0; x < gridCountX; x++) {
 			for(int y = 0; y < gridCountY; y++) {
-				g.drawImage(terrain[map[x][y]], (int) (Screen.gridSize + (x*Screen.gridSize)), (int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize, null);
+				g.drawImage(terrain.get(map[x][y]), (int) (Screen.gridSize + (x*Screen.gridSize)), (int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize, null);
 				g.drawRect((int) (Screen.gridSize + (x*Screen.gridSize)),(int) (Screen.gridSize + (y*Screen.gridSize)),(int) Screen.gridSize,(int) Screen.gridSize);
 			}
 		}
@@ -224,16 +225,17 @@ public class Screen extends JPanel implements Runnable {
 		try {
 			terrainBufferedImage = ImageIO.read(classLoader.getResource(packageName + "/terrain.png"));
 		
-		//TODO Nìjak zkusit udìlat, aby se do terrain uložily jen neprázdné obrázky.
 		// Pøeète terrain soubor, získá typy prostøedí.
+		terrainReading:
 		for(int y = 0; y < 10; y++) {
 			for(int x = 0; x < 10; x++) {	// terrain.png je 250*250 pixelù, jeden typ krajiny je 25*25 pixelù
-				terrain[x + y*10] = new ImageIcon(classLoader.getResource(packageName + "/terrain.png")).getImage();
-				terrain[x + y*10] = createImage(new FilteredImageSource(terrain[x + y*10].getSource(), new CropImageFilter(x*25, y*25, 25, 25)));	// 25 je 1 pixel v Paint.Net				
+				Image tmp = new ImageIcon(classLoader.getResource(packageName + "/terrain.png")).getImage();
+				terrain.addLast(createImage(new FilteredImageSource(tmp.getSource(), new CropImageFilter(x*25, y*25, 25, 25))));	// 25 je 1 pixel v Paint.Net				
 				
-				// Checks 4 points if image is empty 
+				// Checks if image is empty in 4 points
 				if(isImageEmpty(terrainBufferedImage, x*25, y*25) && isImageEmpty(terrainBufferedImage, x*25+9, y*25+9) && isImageEmpty(terrainBufferedImage, x*25+12, y*25+12) && isImageEmpty(terrainBufferedImage, x*25+19, y*25+19)) {
-					terrain[x + y*10] = null;
+					terrain.remove(x + y*10);
+					break terrainReading;
 				}
 			}
 		}
@@ -267,7 +269,7 @@ public class Screen extends JPanel implements Runnable {
 		this.enemyAI = new EnemyAI(this.level);
 		
 		double height = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
-		double width = this.getWidth() / (Screen.gridCountX + 6);
+		double width = this.getWidth() / (Screen.gridCountX + 5);
 		Screen.gridSize = height < width ? height : width;
 		
 		this.gameState = 1;	// Level 1
