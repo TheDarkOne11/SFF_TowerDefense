@@ -13,15 +13,17 @@ import core.Screen;
  *
  */
 public class LevelFile {
-	FileInputStream file;
+	FileInputStream levelFile;
+	FileInputStream levelFile_Var;
 	InputStreamReader reader;
 	Scanner scanner;
 	Level level = new Level();
 	
 	public Level getLevel(String fileName) {
 		try{
-			file = new FileInputStream("level/" + fileName + ".level");
-			reader = new InputStreamReader(file);
+			levelFile = new FileInputStream("level/" + fileName + "/" + fileName + ".level");
+			levelFile_Var = new FileInputStream("level/" + fileName + "/" + fileName + "_Var.level");
+			reader = new InputStreamReader(levelFile);
 			scanner = new Scanner(reader);
 			
 			level.map = new int[Screen.gridCountX][Screen.gridCountY];
