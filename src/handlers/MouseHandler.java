@@ -24,7 +24,7 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		
+
 	}
 
 	public void mouseEntered(MouseEvent e) {
