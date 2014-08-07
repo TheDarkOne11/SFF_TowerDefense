@@ -1,15 +1,16 @@
 package level.terrain;
 
-public class Grass extends TerrainSuperClass {
+import java.awt.Image;
+
+import core.Screen;
+
+public class Grass implements TerrainInterface {
 	public static int id = 0;
 	public boolean isWalkable = false;
-	
-	public Grass() {
-		super(id);
-	}
+	public Image texture = null;
 
 	public void getTextureFile() {
-		
+		this.texture = Screen.terrain[this.id];
 	}
 
 }

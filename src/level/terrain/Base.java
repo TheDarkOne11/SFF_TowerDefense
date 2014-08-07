@@ -5,22 +5,13 @@ package level.terrain;
  * @author Petr
  *
  */
-public class Base extends TerrainSuperClass {
+public class Base implements TerrainInterface {
 	public int id = 3;
 	public boolean isWalkable = true;
 	private int xPos;
 	private int yPos;
 	
 	public Base(int xPos, int yPos) {
-		super(xPos, yPos);
-		this.xPos = xPos;
-		this.yPos = yPos;
-	}
-	
-	public Base(int id, boolean isWalkable, int xPos, int yPos) {
-		super(id, isWalkable, xPos, yPos);
-		this.id = id;
-		this.isWalkable = isWalkable;
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}
