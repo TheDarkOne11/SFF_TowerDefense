@@ -64,7 +64,7 @@ public class Screen extends JPanel implements Runnable {
 		LevelFile levelFile;
 		
 		// Uloženy všechny hodnoty pozic gridu z LevelFile
-		public int[][] map;
+		public static int[][] map;
 		
 		// Uloženy všechny hodnoty pozic vìží
 		public Tower[][] towerMap;
@@ -404,7 +404,7 @@ public class Screen extends JPanel implements Runnable {
 				}
 			} else if(gameState == 2) { 
 				// GridCount buttons
-				levelMaker.clickGridCountButton(e);
+				levelMaker.isButtonClicked(e);
 			}
 		}
 		
