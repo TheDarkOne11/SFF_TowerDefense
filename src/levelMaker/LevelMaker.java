@@ -3,6 +3,7 @@ package levelMaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
 
 import levelMaker.gridCountButtons.ButtonDown_GCX;
 import levelMaker.gridCountButtons.ButtonDown_GCY;
@@ -15,16 +16,11 @@ public class LevelMaker {
 	public int gridCountX = 25;
 	public int gridCountY = 15;
 	
+	FileInputStream levelFile;
+	FileInputStream levelFile_Var;
+	
 	public String gridCountXStr, gridCountYStr;
 	public MyButton buttonUp_GCX, buttonDown_GCX, buttonUp_GCY, buttonDown_GCY;
-	/**
-	 * Tlaèítka:
-	 * 1/ Up = Pøidávájí 1 k hodnotì
-	 * 2/ Down = Ubírají 1 z hodnoty
-	 * 
-	 * GCX = GridCountX
-	 * GCY = GridCountY
-	 */
 	
 	public LevelMaker(Screen screen) {
 		this.screen = screen;
@@ -40,6 +36,10 @@ public class LevelMaker {
 		buttonUp_GCY = new ButtonUp_GCY((int) ((Screen.gridCountX+2)*Screen.gridSize), (int) (Screen.gridSize*4), 30, 30);
 		buttonDown_GCY = new ButtonDown_GCY((int) ((Screen.gridCountX+2)*Screen.gridSize), (int) (Screen.gridSize*5), 30, 30);
 
+	}
+	
+	public void transcodeLevel() {
+		
 	}
 
 	public void isButtonClicked(MouseEvent e) {

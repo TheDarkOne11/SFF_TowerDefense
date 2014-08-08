@@ -2,8 +2,8 @@ package levelMaker.gridCountButtons;
 
 import javax.swing.ImageIcon;
 
-import core.Screen;
 import levelMaker.MyButton;
+import core.Screen;
 
 /** Pøidává k hodnotì gridCountY 1. */
 public class ButtonUp_GCY extends MyButton {
