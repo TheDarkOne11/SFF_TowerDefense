@@ -37,9 +37,11 @@ public abstract class MyButton {
 	public void drawButton(Graphics g, int x, int y, int width, int height) {
 		g.drawImage(this.texture, x, y, width, height, null);
 	}
-
+	
+	/** Action after clicking. */
 	public abstract void action();
-
+	
+	/** Must be used in constructor. */
 	public abstract void getTextureFile();
 
 }

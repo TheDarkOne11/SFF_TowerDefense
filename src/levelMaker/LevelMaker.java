@@ -10,6 +10,7 @@ import levelMaker.gridCountButtons.ButtonDown_GCX;
 import levelMaker.gridCountButtons.ButtonDown_GCY;
 import levelMaker.gridCountButtons.ButtonUp_GCX;
 import levelMaker.gridCountButtons.ButtonUp_GCY;
+import levelMaker.terrain.GameGrid;
 import levelMaker.terrain.TerrainMenu;
 import core.Screen;
 
@@ -26,6 +27,7 @@ public class LevelMaker {
 	public MyButton buttonUp_GCX, buttonDown_GCX, buttonUp_GCY, buttonDown_GCY;
 	
 	LinkedList<TerrainMenu> terrainTypes = new LinkedList<TerrainMenu>();
+	LinkedList<GameGrid> gameGrid = new LinkedList<GameGrid>();
 
 	public LevelMaker(Screen screen) {
 		this.screen = screen;
@@ -48,8 +50,16 @@ public class LevelMaker {
 				terrainTypes.addLast(new TerrainMenu((int) ((Screen.gridCountX + 2 + f) * Screen.gridSize), (int) (Screen.gridSize * (6 + i)), (int) Screen.gridSize, (int) Screen.gridSize, terrainMenuColumnNum * i + f));
 			}
 		}
+		
+		// Game grid
+		for (int x = 0; x < gridCountX; x++) {
+			for (int y = 0; y < gridCountY; y++) {
+				gameGrid.addLast(new GameGrid((int) (Screen.gridSize + (x * Screen.gridSize)), (int) (Screen.gridSize + (y * Screen.gridSize)), (int) Screen.gridSize, (int) Screen.gridSize));
+			}
+		}
 	}
-
+	
+	//TODO Až bude level hotov, pøevedu ho do souboru.
 	public void transcodeLevel() {
 
 	}
@@ -67,19 +77,15 @@ public class LevelMaker {
 				terrainTypes.get(terrainMenuColumnNum * i + f).clickButton(e);
 			}
 		}
-	}
-/*
-	// TODO Z obrázkù krajin udìlat instance MyButton.
-	public void drawTerrainMenu(Graphics g) {
-		int columnNum = 4;
-		for (int i = 0; i < ((int) Math.ceil(Screen.terrain.size() / (double) columnNum)); i++) {
-			for (int f = 0; f < columnNum && columnNum * i + f < Screen.terrain.size(); f++) {
-				g.drawImage(Screen.terrain.get(columnNum * i + f), (int) ((Screen.gridCountX + 2 + f) * Screen.gridSize), (int) (Screen.gridSize * (6 + i)), (int) Screen.gridSize, (int) Screen.gridSize, null);
-				g.drawRect((int) ((Screen.gridCountX + 2 + f) * Screen.gridSize), (int) (Screen.gridSize * (6 + i)), (int) Screen.gridSize, (int) Screen.gridSize);
+		
+		// Game grid
+		for (int x = 0; x < gridCountX; x++) {
+			for (int y = 0; y < gridCountY; y++) {
+				gameGrid.get(y + x*gridCountY).clickButton(e);
 			}
 		}
 	}
-	*/
+	
 	public void drawTerrainMenu(Graphics g) {
 		for (int i = 0; i < ((int) Math.ceil(Screen.terrain.size() / (double) terrainMenuColumnNum)); i++) {
 			for (int f = 0; f < terrainMenuColumnNum && terrainMenuColumnNum * i + f < Screen.terrain.size(); f++) {
@@ -106,10 +112,18 @@ public class LevelMaker {
 
 	}
 
-	// TODO Buï vložit terrain image do ruky nebo vytvoøit oznaèování ve gridu a
-	// kliknutím dát daný terrain image na pøíslušné místo
-	public void clickTerrainImage(MouseEvent e) {
-
+	public void drawGameGrid(Graphics g) {
+		g.setColor(Color.black);
+		for (int x = 0; x < gridCountX; x++) {
+			for (int y = 0; y < gridCountY; y++) {
+				gameGrid.get(y + x*gridCountY).x = (int) (Screen.gridSize + (x * Screen.gridSize));
+				gameGrid.get(y + x*gridCountY).y = (int) (Screen.gridSize + (y * Screen.gridSize));
+				gameGrid.get(y + x*gridCountY).width = (int) Screen.gridSize;
+				gameGrid.get(y + x*gridCountY).height = (int) Screen.gridSize;
+				gameGrid.get(y + x*gridCountY).drawButton(g);
+				
+				g.drawRect((int) (Screen.gridSize + (x * Screen.gridSize)), (int) (Screen.gridSize + (y * Screen.gridSize)), (int) Screen.gridSize, (int) Screen.gridSize);
+			}
+		}
 	}
-
 }
