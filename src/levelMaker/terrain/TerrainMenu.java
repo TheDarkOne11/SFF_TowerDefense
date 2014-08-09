@@ -30,11 +30,11 @@ public class TerrainMenu extends MyButton {
 	public void action() {
 		// Levé tlaèítko
 		if(super.mouseEvent.getButton() == MouseEvent.BUTTON1) {
-			System.out.println(id);
+			Screen.handTerrain = id;
 		} 
 		// Pravé tlaèítko
 		else if(super.mouseEvent.getButton() == MouseEvent.BUTTON3) {
-			
+			Screen.handTerrain = -1;
 		}
 	}
 

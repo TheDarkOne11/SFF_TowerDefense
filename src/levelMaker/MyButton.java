@@ -14,7 +14,7 @@ public abstract class MyButton {
 	public Image texture;
 	protected String gridCountButtonTexturePath = "res/levelMaker/";
 	
-	public MouseEvent mouseEvent;
+	protected MouseEvent mouseEvent;
 
 	public MyButton(int x, int y, int width, int height) {
 		this.width = width;
@@ -32,6 +32,10 @@ public abstract class MyButton {
 
 	public void drawButton(Graphics g) {
 		g.drawImage(this.texture, this.x, this.y, this.width, this.height, null);
+	}
+	
+	public void drawButton(Graphics g, int x, int y, int width, int height) {
+		g.drawImage(this.texture, x, y, width, height, null);
 	}
 
 	public abstract void action();

@@ -52,9 +52,10 @@ public class Screen extends JPanel implements Runnable {
 	/**
 	 * 1 = vìž v ruce
 	 */
-	public int hand = 0;
-	public int handYPos = 0;
-	public int handXPos = 0;
+	public int handTower = 0;
+	public static int handTerrain = -1;
+	public static int handYPos = 0;
+	public static int handXPos = 0;
 
 	// Level maker
 	LevelMaker levelMaker;
@@ -133,8 +134,8 @@ public class Screen extends JPanel implements Runnable {
 			}
 
 			// Tower in hand
-			if (hand != 0 && Tower.towerList[hand - 1] != null) {
-				g.drawImage(Tower.towerList[hand - 1].texture, this.handXPos - (int) Screen.gridSize / 2, this.handYPos - (int) Screen.gridSize / 2, (int) Screen.gridSize, (int) Screen.gridSize, null);
+			if (handTower != 0 && Tower.towerList[handTower - 1] != null) {
+				drawObjectInHand(g, Tower.towerList[handTower - 1].texture);
 			}
 
 		} else if (gameState == 2) {
@@ -150,6 +151,11 @@ public class Screen extends JPanel implements Runnable {
 			drawPlayerGrid(g);
 			levelMaker.drawGridCountButtons(g);
 			levelMaker.drawTerrainMenu(g);
+			
+			// Terrain in hand
+			if (handTerrain != -1 && Screen.terrain.get(handTerrain) != null) {
+				drawObjectInHand(g, Screen.terrain.get(handTerrain));
+			}
 
 		}
 
@@ -207,6 +213,10 @@ public class Screen extends JPanel implements Runnable {
 		g.drawRect((int) (Screen.gridSize * 5.25), (int) (Screen.gridSize * (Screen.gridCountY + 1.25)), (int) Screen.gridSize, (int) Screen.gridSize * Screen.shopGridCountY);
 
 	}
+	
+	public static void drawObjectInHand(Graphics g, Image texture) {
+		g.drawImage(texture, handXPos - (int) Screen.gridSize / 2, handYPos - (int) Screen.gridSize / 2, (int) Screen.gridSize, (int) Screen.gridSize, null);
+	}
 
 	/**
 	 * Naète základní vìci.
@@ -230,12 +240,7 @@ public class Screen extends JPanel implements Runnable {
 												// pixelù
 					Image tmp = new ImageIcon(classLoader.getResource(packageName + "/terrain.png")).getImage();
 					terrain.addLast(createImage(new FilteredImageSource(tmp.getSource(), new CropImageFilter(x * 25, y * 25, 25, 25)))); // 25
-																																			// je
-																																			// 1
-																																			// pixel
-																																			// v
-																																			// Paint.Net
-
+					
 					// Checks if image is empty in 4 points
 					if (isImageEmpty(terrainBufferedImage, x * 25, y * 25) && isImageEmpty(terrainBufferedImage, x * 25 + 9, y * 25 + 9) && isImageEmpty(terrainBufferedImage, x * 25 + 12, y * 25 + 12) && isImageEmpty(terrainBufferedImage, x * 25 + 19, y * 25 + 19)) {
 						terrain.remove(x + y * 10);
@@ -270,7 +275,7 @@ public class Screen extends JPanel implements Runnable {
 		towerMap = new Tower[gridCountX][gridCountY];
 		this.level = levelFile.getLevel(levelName);
 		this.level.FindSpawnPoint();
-		this.map = this.level.map;
+		Screen.map = this.level.map;
 		this.enemyAI = new EnemyAI(this.level);
 
 		double height = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
@@ -381,8 +386,8 @@ public class Screen extends JPanel implements Runnable {
 																		// je
 																		// místo
 																		// prázdné
-				user.player.money -= Tower.towerList[hand - 1].cost;
-				towerMap[xPos][yPos] = (Tower) Tower.towerList[hand - 1].clone();
+				user.player.money -= Tower.towerList[handTower - 1].cost;
+				towerMap[xPos][yPos] = (Tower) Tower.towerList[handTower - 1].clone();
 			}
 		}
 	}
@@ -397,7 +402,7 @@ public class Screen extends JPanel implements Runnable {
 
 		public void updateMouse(MouseEvent e) {
 			if (gameState == 1) {
-				if (mouseDown && hand == 0) {
+				if (mouseDown && handTower == 0) {
 					// Jestli je myš umístìna nìkdy v shopu_Pozice X
 					if (e.getXOnScreen() >= shopGridStartX && e.getXOnScreen() <= shopGridStartX * (1 + gridSize)) {
 						// Jestli je myš umístìna nìkdy v shopu_Pozice X
@@ -405,7 +410,7 @@ public class Screen extends JPanel implements Runnable {
 							// Tower 1
 							if (e.getXOnScreen() >= shopGridStartX && e.getXOnScreen() <= shopGridStartX + gridSize && e.getYOnScreen() >= shopGridStartY && e.getYOnScreen() <= shopGridStartY + gridSize) {
 								if (user.player.money >= Tower.towerList[0].cost) {
-									hand = 1;
+									handTower = 1;
 								}
 							}
 						}
@@ -420,9 +425,9 @@ public class Screen extends JPanel implements Runnable {
 		public void mouseDown(MouseEvent e) {
 			mouseDown = true;
 
-			if (hand != 0) {
+			if (handTower != 0) {
 				placeTower(e.getXOnScreen(), e.getYOnScreen());
-				hand = 0;
+				handTower = 0;
 			}
 
 			updateMouse(e);
