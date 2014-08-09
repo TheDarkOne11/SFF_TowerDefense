@@ -15,7 +15,7 @@ public class ButtonUp_GCY extends MyButton {
 	}
 
 	public void action() {
-		if(Screen.gridCountY < Screen.map[0].length) {
+		if (Screen.gridCountY < Screen.map[0].length) {
 			Screen.gridCountY++;
 		}
 	}

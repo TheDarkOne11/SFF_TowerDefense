@@ -5,13 +5,14 @@ import core.Screen;
 
 /**
  * Pohyb aktuálního nepøítele.
+ * 
  * @author Petr
- *
+ * 
  */
 public class EnemyMove {
 	public Enemy enemy;
 	SpawnPoint spawnPoint;
-	
+
 	/** Souøadnicová reálná pozice nepøítele. */
 	public double xPos, yPos;
 	/** Souøadnicová pozice ètverce, na kterém se nepøítel právì nachází. */
@@ -20,10 +21,10 @@ public class EnemyMove {
 	public int routePointNumber = 0;
 	/** Vzdálenost tohoto nepøítele od støedu ètverce. */
 	public double distanceToCenter;
-	
+
 	public boolean attack;
 	int health;
-	
+
 	public EnemyMove(Enemy enemy, SpawnPoint spawnPoint) {
 		this.enemy = enemy;
 		this.routePosX = spawnPoint.getX();
@@ -33,14 +34,14 @@ public class EnemyMove {
 		this.attack = false;
 		this.health = enemy.health;
 	}
-	
+
 	public EnemyMove update() {
 		EnemyMove currentEnemy = this;
-		
-		if(currentEnemy.health <= 0) {
+
+		if (currentEnemy.health <= 0) {
 			return null;
 		}
-		
+
 		return currentEnemy;
 	}
 }

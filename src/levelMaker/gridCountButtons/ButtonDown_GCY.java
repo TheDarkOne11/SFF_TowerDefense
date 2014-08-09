@@ -15,7 +15,7 @@ public class ButtonDown_GCY extends MyButton {
 	}
 
 	public void action() {
-		if(Screen.gridCountY > 0) {
+		if (Screen.gridCountY > 0) {
 			Screen.gridCountY--;
 		}
 	}

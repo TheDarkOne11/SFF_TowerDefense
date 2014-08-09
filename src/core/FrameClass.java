@@ -8,11 +8,12 @@ import javax.swing.SwingUtilities;
 
 /**
  * Okno a posluchaèe.
+ * 
  * @author Petr
- *
+ * 
  */
 public class FrameClass extends JFrame {
-	
+
 	public static void main(String[] args) {
 		// Ochrana proti obèasné bílé obrazovce
 		SwingUtilities.invokeLater(new Runnable() {
@@ -21,19 +22,19 @@ public class FrameClass extends JFrame {
 			}
 		});
 	}
-	
+
 	public FrameClass() {
 		this.setTitle("SFF's Castle Tower Defense");
 		this.setExtendedState(MAXIMIZED_BOTH);
 		this.setUndecorated(true);
 		this.setVisible(true);
 		this.addWindowListener(new CloseWindow_WindowAdapter());
-		
+
 		Screen screen = new Screen(this);
-		
+
 		this.add(screen);
 	}
-	
+
 	public int getWidth() {
 		return (int) (super.getWidth() + this.getPreferredSize().getWidth());
 	}
@@ -47,6 +48,6 @@ public class FrameClass extends JFrame {
 		public void windowClosing(WindowEvent e) {
 			System.exit(0);
 		}
-		
+
 	}
 }

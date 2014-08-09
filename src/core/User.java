@@ -2,8 +2,9 @@ package core;
 
 /**
  * Úèet, pøes který se zapíná aplikace.
+ * 
  * @author Petr
- *
+ * 
  */
 public class User {
 	private Screen screen;
@@ -13,10 +14,10 @@ public class User {
 
 	public User(Screen screen) {
 		this.screen = screen;
-		
-		this.screen.gameState = 0;	//Sets scene to main menu
+
+		this.screen.gameState = 0; // Sets scene to main menu
 	}
-	
+
 	public void createPlayer() {
 		this.player = new Player(this);
 	}

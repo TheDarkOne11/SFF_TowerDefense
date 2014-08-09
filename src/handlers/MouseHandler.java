@@ -9,14 +9,14 @@ import core.Screen;
 public class MouseHandler implements MouseListener, MouseMotionListener {
 	private Screen screen;
 	private Screen.MouseHeld mouseHeld;
-	
+
 	public MouseHandler(Screen screen) {
 		this.screen = screen;
 		this.mouseHeld = this.screen.new MouseHeld();
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		
+
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -28,11 +28,11 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		
+
 	}
 
 	public void mouseExited(MouseEvent e) {
-		
+
 	}
 
 	// MOUSE MOTION LISTENER

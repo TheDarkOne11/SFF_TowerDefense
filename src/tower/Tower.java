@@ -7,16 +7,16 @@ import javax.swing.ImageIcon;
 public class Tower implements Cloneable {
 	public String textureFile = "";
 	public Image texture;
-	
+
 	public static final Tower[] towerList = new Tower[200];
 	public int id;
 	public int cost;
 	public int range;
-	
+
 	public static final Tower lightningTower = new TowerLightning(0, 10, 2).getTextureFile("LightningTower");
-	
+
 	public Tower(int id, int cost, int range) {
-		if(towerList[id] != null) {
+		if (towerList[id] != null) {
 			System.out.println("[TowerInitialization] Two towers with same id: " + id);
 		} else {
 			towerList[id] = this;
@@ -25,16 +25,17 @@ public class Tower implements Cloneable {
 			this.range = range;
 		}
 	}
-	
+
 	public Tower getTextureFile(String textureFile) {
 		this.textureFile = textureFile;
 		this.texture = new ImageIcon("res/tower/" + textureFile + ".png").getImage();
-		
+
 		return this;
 	}
 
 	/**
-	 * Bez klonování by se stalo, že po zmìnì stavu(napø. range, útok) jedné vìže na mapì by zmìna nastala u všech vìží.
+	 * Bez klonování by se stalo, že po zmìnì stavu(napø. range, útok) jedné
+	 * vìže na mapì by zmìna nastala u všech vìží.
 	 */
 	public Object clone() {
 		try {

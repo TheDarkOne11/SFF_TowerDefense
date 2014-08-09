@@ -15,7 +15,7 @@ public class ButtonDown_GCX extends MyButton {
 	}
 
 	public void action() {
-		if(Screen.gridCountX > 0) {
+		if (Screen.gridCountX > 0) {
 			Screen.gridCountX--;
 		}
 	}

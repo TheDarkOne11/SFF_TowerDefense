@@ -15,7 +15,7 @@ public class ButtonUp_GCX extends MyButton {
 	}
 
 	public void action() {
-		if(Screen.gridCountX < Screen.map.length) {
+		if (Screen.gridCountX < Screen.map.length) {
 			Screen.gridCountX++;
 		}
 	}
