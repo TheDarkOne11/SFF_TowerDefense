@@ -132,7 +132,7 @@ public class Screen extends JPanel implements Runnable {
 				}
 			}
 
-			// HAND
+			// Tower in hand
 			if (hand != 0 && Tower.towerList[hand - 1] != null) {
 				g.drawImage(Tower.towerList[hand - 1].texture, this.handXPos - (int) Screen.gridSize / 2, this.handYPos - (int) Screen.gridSize / 2, (int) Screen.gridSize, (int) Screen.gridSize, null);
 			}
