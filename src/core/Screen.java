@@ -139,18 +139,18 @@ public class Screen extends JPanel implements Runnable {
 			}
 
 		} else if (gameState == 2) {
-			double height = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
-			double width = this.getWidth() / (Screen.gridCountX + 6);
+			double height = this.getHeight() / (LevelMaker.gridCountY + Screen.shopGridCountY + 2);
+			double width = this.getWidth() / (LevelMaker.gridCountX + 6);
 			Screen.gridSize = height < width ? height : width;
 
 			// Background
 			g.setColor(Color.GREEN);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 
-			drawGameGrid(g);
-			drawPlayerGrid(g);
+			levelMaker.drawGameGrid(g);
 			levelMaker.drawGridCountButtons(g);
 			levelMaker.drawTerrainMenu(g);
+			drawPlayerGrid(g);
 			
 			// Terrain in hand
 			if (handTerrain != -1 && Screen.terrain.get(handTerrain) != null) {

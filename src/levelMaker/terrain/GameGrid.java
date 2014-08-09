@@ -1,5 +1,6 @@
 package levelMaker.terrain;
 
+import levelMaker.LevelMaker;
 import levelMaker.MyButton;
 import core.Screen;
 
@@ -14,12 +15,14 @@ public class GameGrid extends MyButton {
 		this.getTextureFile();
 	}
 
+	//TODO Bude si ukládat, kam vložil spawnPoint a base.
 	public void action() {
 		// Vložení krajiny do ètverce
-		System.out.println("x/y: " + this.x + "/ " + this.y);
+		//System.out.println("x/y: " + x + "/ " + y);
 		if(Screen.handTerrain != -1) {
 			this.id = Screen.handTerrain;
 			this.getTextureFile();
+			LevelMaker.spec = this;
 		} 
 		// Oznaèení ètverce
 		else {
@@ -28,7 +31,7 @@ public class GameGrid extends MyButton {
 	}
 
 	public void getTextureFile() {
-		this.texture = Screen.terrain.get(id);
+		this.texture = Screen.terrain.get(this.id);
 	}
 
 }

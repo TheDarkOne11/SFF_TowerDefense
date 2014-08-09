@@ -2,8 +2,8 @@ package levelMaker.gridCountButtons;
 
 import javax.swing.ImageIcon;
 
+import levelMaker.LevelMaker;
 import levelMaker.MyButton;
-import core.Screen;
 
 /** Ubírá hodnotì gridCountX 1. */
 public class ButtonDown_GCX extends MyButton {
@@ -15,8 +15,9 @@ public class ButtonDown_GCX extends MyButton {
 	}
 
 	public void action() {
-		if (Screen.gridCountX > 0) {
-			Screen.gridCountX--;
+		if (LevelMaker.gridCountX > 1) {
+			LevelMaker.lastGridCountX = LevelMaker.gridCountX;
+			LevelMaker.gridCountX--;
 		}
 	}
 
