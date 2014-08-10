@@ -1,6 +1,5 @@
 package levelMaker.terrain;
 
-import levelMaker.LevelMaker;
 import levelMaker.MyButton;
 import core.Screen;
 
@@ -22,7 +21,6 @@ public class GameGrid extends MyButton {
 		if(Screen.handTerrain != -1) {
 			this.id = Screen.handTerrain;
 			this.getTextureFile();
-			LevelMaker.spec = this;
 		} 
 		// Oznaèení ètverce
 		else {

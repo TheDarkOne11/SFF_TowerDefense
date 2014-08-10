@@ -21,7 +21,8 @@ public class TerrainMenu extends MyButton {
 	}
 	
 	public void drawButton(Graphics g) {
-		g.drawImage(this.texture, this.x, this.y, this.width, this.height, null);
+		//g.drawImage(this.texture, this.x, this.y, this.width, this.height, null);
+		super.drawButton(g);
 		g.drawRect(this.x, this.y, this.width, this.height);
 	}
 

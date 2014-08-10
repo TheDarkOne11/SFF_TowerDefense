@@ -15,7 +15,7 @@ public abstract class MyButton {
 	protected String gridCountButtonTexturePath = "res/levelMaker/";
 	
 	protected MouseEvent mouseEvent;
-
+	
 	public MyButton(int x, int y, int width, int height) {
 		this.width = width;
 		this.height = height;

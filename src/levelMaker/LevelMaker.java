@@ -18,10 +18,9 @@ public class LevelMaker {
 	Screen screen;
 	int terrainMenuColumnNum = 4;
 	public static int gridCountX = Screen.gridCountX;
-	public static int lastGridCountX = gridCountX;
 	public static int gridCountY = Screen.gridCountY;
+	public static int lastGridCountX = gridCountX;
 	public static int lastGridCountY = gridCountY;
-	public static GameGrid spec;
 
 	FileInputStream levelFile;
 	FileInputStream levelFile_Var;
@@ -120,20 +119,21 @@ public class LevelMaker {
 		g.setColor(Color.black);
 		for (int y = 0; y < LevelMaker.gridCountY; y++) {
 			for (int x = 0; x < LevelMaker.gridCountX; x++) {
+				
 				if(LevelMaker.gridCountX != LevelMaker.lastGridCountX) {
 					if((x+1) % LevelMaker.gridCountX == 0 && x != 0) {
 						if(LevelMaker.gridCountX > LevelMaker.lastGridCountX) {
 							gameGrid.add(x + y * gridCountX, new GameGrid((int) (Screen.gridSize + (x * Screen.gridSize)), (int) (Screen.gridSize + (y * Screen.gridSize)), (int) Screen.gridSize, (int) Screen.gridSize));
 						} else {
-							gameGrid.remove(x + y * gridCountX);
+							gameGrid.remove((x+1) + y * gridCountX);
 						}
 					}
 				} else if(LevelMaker.gridCountY != LevelMaker.lastGridCountY) {
-					if(y == LevelMaker.gridCountY-1) {
+					if((y+1) == LevelMaker.gridCountY) {
 						if(LevelMaker.gridCountY > LevelMaker.lastGridCountY) {
-							gameGrid.add(x + y * gridCountX, new GameGrid((int) (Screen.gridSize + (x * Screen.gridSize)), (int) (Screen.gridSize + (y * Screen.gridSize)), (int) Screen.gridSize, (int) Screen.gridSize));
+							gameGrid.addLast(new GameGrid((int) (Screen.gridSize + (x * Screen.gridSize)), (int) (Screen.gridSize + (y * Screen.gridSize)), (int) Screen.gridSize, (int) Screen.gridSize));
 						} else {
-							gameGrid.remove(x + y * gridCountX);
+							gameGrid.removeLast();
 						}
 					}
 				}
@@ -149,6 +149,7 @@ public class LevelMaker {
 		}
 		LevelMaker.lastGridCountX = LevelMaker.gridCountX;
 		LevelMaker.lastGridCountY = LevelMaker.gridCountY;
+		//TODO Prozatímní, Screen bude gridCount hodnoty získávat ze souboru.
 		Screen.gridCountX = LevelMaker.gridCountX;
 		Screen.gridCountY = LevelMaker.gridCountY;
 	}
