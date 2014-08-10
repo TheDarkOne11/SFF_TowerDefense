@@ -3,6 +3,7 @@ package levelMaker.terrain;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
+import levelMaker.LevelMaker;
 import levelMaker.MyButton;
 import core.Screen;
 
@@ -35,7 +36,11 @@ public class TerrainMenu extends MyButton {
 		} 
 		// Pravé tlaèítko
 		else if(super.mouseEvent.getButton() == MouseEvent.BUTTON3) {
-			Screen.handTerrain = -1;
+			for(int i = 0; i < LevelMaker.markedGameGrid.size(); i++) {
+				LevelMaker.markedGameGrid.get(i).id = this.id;
+				LevelMaker.markedGameGrid.get(i).getTextureFile();
+			}
+			LevelMaker.markedGameGrid.clear();
 		}
 	}
 

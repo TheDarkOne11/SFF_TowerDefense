@@ -28,8 +28,9 @@ public class LevelMaker {
 	public String gridCountXStr, gridCountYStr;
 	public MyButton buttonUp_GCX, buttonDown_GCX, buttonUp_GCY, buttonDown_GCY;
 	
-	LinkedList<TerrainMenu> terrainTypes = new LinkedList<TerrainMenu>();
-	LinkedList<GameGrid> gameGrid = new LinkedList<GameGrid>();
+	public static LinkedList<TerrainMenu> terrainTypes = new LinkedList<TerrainMenu>();
+	public static LinkedList<GameGrid> gameGrid = new LinkedList<GameGrid>();
+	public static LinkedList<GameGrid> markedGameGrid = new LinkedList<GameGrid>();
 
 	public LevelMaker(Screen screen) {
 		this.screen = screen;
@@ -67,6 +68,9 @@ public class LevelMaker {
 
 	}
 
+	/**
+	 * Po kliknutí projde všechny tlaèítka v LevelMakeru, aby zjistilo, které ylo kliknuto.
+	 */
 	public void isButtonClicked(MouseEvent e) {
 		// Terrain menu
 		for (int i = 0; i < ((int) Math.ceil(Screen.terrain.size() / (double) terrainMenuColumnNum)); i++) {
@@ -152,5 +156,14 @@ public class LevelMaker {
 		//TODO Prozatímní, Screen bude gridCount hodnoty získávat ze souboru.
 		Screen.gridCountX = LevelMaker.gridCountX;
 		Screen.gridCountY = LevelMaker.gridCountY;
+	}
+	
+	public void drawMarkedGameGrid(Graphics g) {
+		Color lastColor = g.getColor();
+		g.setColor(new Color(64, 64, 64, 145));
+		for(int i = 0; i < LevelMaker.markedGameGrid.size(); i++) {
+			g.fillRect(LevelMaker.markedGameGrid.get(i).x, LevelMaker.markedGameGrid.get(i).y, LevelMaker.markedGameGrid.get(i).width, LevelMaker.markedGameGrid.get(i).height);
+		}
+		g.setColor(lastColor);
 	}
 }
