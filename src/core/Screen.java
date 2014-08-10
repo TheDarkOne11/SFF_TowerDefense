@@ -80,7 +80,11 @@ public class Screen extends JPanel implements Runnable {
 	EnemyAI enemyAI;
 
 	/**
-	 * 0. Menu 1. In Game 2. Level maker
+	 * 0. Menu 
+	 * <p>
+	 * 1. In Game 
+	 * <p>
+	 * 2. Level maker
 	 * */
 	public int gameState;
 
@@ -150,6 +154,7 @@ public class Screen extends JPanel implements Runnable {
 			levelMaker.drawGameGrid(g);
 			levelMaker.drawGridCountButtons(g);
 			levelMaker.drawTerrainMenu(g);
+			levelMaker.drawMarkedGameGrid(g);
 			drawPlayerGrid(g);
 			
 			// Terrain in hand
