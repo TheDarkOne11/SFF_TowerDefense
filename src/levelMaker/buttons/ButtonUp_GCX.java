@@ -1,9 +1,10 @@
-package levelMaker.gridCountButtons;
+package levelMaker.buttons;
 
 import javax.swing.ImageIcon;
 
 import levelMaker.LevelMaker;
 import levelMaker.MyButton;
+import lib.PathVar;
 import core.Screen;
 
 /** Pøidává k hodnotì gridCountX 1. */
@@ -23,7 +24,7 @@ public class ButtonUp_GCX extends MyButton {
 	}
 
 	public void getTextureFile() {
-		this.texture = new ImageIcon(gridCountButtonTexturePath + this.textureFile + ".png").getImage();
+		this.texture = new ImageIcon(PathVar.gridCountButtonPath + this.textureFile + ".png").getImage();
 	}
 
 }

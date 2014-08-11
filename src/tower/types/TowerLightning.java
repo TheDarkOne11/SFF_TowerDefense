@@ -1,4 +1,6 @@
-package tower;
+package tower.types;
+
+import tower.Tower;
 
 public class TowerLightning extends Tower {
 

@@ -4,7 +4,10 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import enemy.types.EnemySlime;
+
 import lib.EnemyVar;
+import lib.PathVar;
 
 /**
  * Rodiè všech nepøátel.
@@ -46,7 +49,7 @@ public class Enemy {
 		if (!this.textureFile.contains(".png"))
 			this.textureFile += ".png";
 
-		this.texture = new ImageIcon("res/enemy/" + this.textureFile).getImage();
+		this.texture = new ImageIcon(PathVar.enemyPath + this.textureFile).getImage();
 
 		return this;
 	}

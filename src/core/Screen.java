@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 import level.Level;
 import level.LevelFile;
 import levelMaker.LevelMaker;
+import lib.PathVar;
 import tower.Tower;
 import enemy.Enemy;
 import enemy.EnemyAI;
@@ -70,7 +72,6 @@ public class Screen extends JPanel implements Runnable {
 	// Uloženy všechny hodnoty pozic vìží
 	public Tower[][] towerMap;
 	public static LinkedList<Image> terrain = new LinkedList<Image>();
-	String packageName = this.getClass().getPackage().getName();
 
 	// Enemy
 	/** Kolik nepøátel na mapì je na mapì v jednu chvíli. */
@@ -152,7 +153,7 @@ public class Screen extends JPanel implements Runnable {
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
 
 			levelMaker.drawGameGrid(g);
-			levelMaker.drawGridCountButtons(g);
+			levelMaker.drawButtons(g);
 			levelMaker.drawTerrainMenu(g);
 			levelMaker.drawMarkedGameGrid(g);
 			drawPlayerGrid(g);
@@ -228,22 +229,19 @@ public class Screen extends JPanel implements Runnable {
 	 * 
 	 * @throws IOException
 	 */
-	public void loadGame() {
+	private void loadGame() {
 		user = new User(this);
 		levelFile = new LevelFile();
-		ClassLoader classLoader = this.getClass().getClassLoader();
 		wave = new Wave(this);
 		BufferedImage terrainBufferedImage;
 
 		try {
-			terrainBufferedImage = ImageIO.read(classLoader.getResource(packageName + "/terrain.png"));
+			terrainBufferedImage = ImageIO.read(new File(PathVar.terrainSprite));
 
 			// Pøeète terrain soubor, získá typy prostøedí.
 			terrainReading: for (int y = 0; y < 10; y++) {
-				for (int x = 0; x < 10; x++) { // terrain.png je 250*250 pixelù,
-												// jeden typ krajiny je 25*25
-												// pixelù
-					Image tmp = new ImageIcon(classLoader.getResource(packageName + "/terrain.png")).getImage();
+				for (int x = 0; x < 10; x++) { // terrain.png je 250*250 pixelù, jeden typ krajiny je 25*25 pixelù
+					Image tmp = new ImageIcon(PathVar.terrainSprite).getImage();
 					terrain.addLast(createImage(new FilteredImageSource(tmp.getSource(), new CropImageFilter(x * 25, y * 25, 25, 25)))); // 25
 					
 					// Checks if image is empty in 4 points
@@ -274,7 +272,7 @@ public class Screen extends JPanel implements Runnable {
 	 * @param user
 	 * @param levelName
 	 */
-	public void startGame(User user, String levelName) {
+	private void startGame(User user, String levelName) {
 		user.createPlayer();
 		map = new int[Screen.gridCountX][Screen.gridCountY];
 		towerMap = new Tower[gridCountX][gridCountY];
@@ -291,7 +289,7 @@ public class Screen extends JPanel implements Runnable {
 		this.wave.waveNumber = 0;
 	}
 
-	public void startLevelMaker(User user) {
+	private void startLevelMaker(User user) {
 		map = new int[100][100];
 		user.createPlayer();
 		double height = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
@@ -384,13 +382,10 @@ public class Screen extends JPanel implements Runnable {
 		int yPos = (int) (y / gridSize);
 
 		if (xPos > 0 && xPos <= Screen.gridCountX && yPos > 0 && yPos <= Screen.gridCountY) {
-			xPos -= 1;
-			yPos -= 1;
+			xPos--;
+			yPos--;
 
-			if (towerMap[xPos][yPos] == null && map[xPos][yPos] == 0) { // Pokud
-																		// je
-																		// místo
-																		// prázdné
+			if (towerMap[xPos][yPos] == null && map[xPos][yPos] == 0) { // Pokud je místo prázdné
 				user.player.money -= Tower.towerList[handTower - 1].cost;
 				towerMap[xPos][yPos] = (Tower) Tower.towerList[handTower - 1].clone();
 			}

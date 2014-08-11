@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
+import lib.PathVar;
+
 import core.Screen;
 
 /**
@@ -22,8 +24,8 @@ public class LevelFile {
 
 	public Level getLevel(String fileName) {
 		try {
-			levelFile = new FileInputStream("level/" + fileName + "/" + fileName + ".level");
-			levelFile_Var = new FileInputStream("level/" + fileName + "/" + fileName + "_Var.level");
+			levelFile = new FileInputStream(PathVar.levelPath + fileName + "/" + fileName + PathVar.levelExtension);
+			levelFile_Var = new FileInputStream(PathVar.levelPath + fileName + "/" + fileName + PathVar.levelVarExtension);
 			reader = new InputStreamReader(levelFile);
 			scanner = new Scanner(reader);
 

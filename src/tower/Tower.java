@@ -4,6 +4,10 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import tower.types.TowerLightning;
+
+import lib.PathVar;
+
 public class Tower implements Cloneable {
 	public String textureFile = "";
 	public Image texture;
@@ -28,7 +32,7 @@ public class Tower implements Cloneable {
 
 	public Tower getTextureFile(String textureFile) {
 		this.textureFile = textureFile;
-		this.texture = new ImageIcon("res/tower/" + textureFile + ".png").getImage();
+		this.texture = new ImageIcon(PathVar.towerPath + textureFile + ".png").getImage();
 
 		return this;
 	}

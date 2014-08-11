@@ -4,14 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
+import java.util.Scanner;
 
-import levelMaker.gridCountButtons.ButtonDown_GCX;
-import levelMaker.gridCountButtons.ButtonDown_GCY;
-import levelMaker.gridCountButtons.ButtonUp_GCX;
-import levelMaker.gridCountButtons.ButtonUp_GCY;
+import levelMaker.buttons.ButtonDown_GCX;
+import levelMaker.buttons.ButtonDown_GCY;
+import levelMaker.buttons.ButtonUp_GCX;
+import levelMaker.buttons.ButtonUp_GCY;
+import levelMaker.buttons.TranscodeButton;
 import levelMaker.terrain.GameGrid;
 import levelMaker.terrain.TerrainMenu;
+import lib.PathVar;
 import core.Screen;
 
 public class LevelMaker {
@@ -22,11 +26,10 @@ public class LevelMaker {
 	public static int lastGridCountX = gridCountX;
 	public static int lastGridCountY = gridCountY;
 
-	FileInputStream levelFile;
-	FileInputStream levelFile_Var;
-
 	public String gridCountXStr, gridCountYStr;
 	public MyButton buttonUp_GCX, buttonDown_GCX, buttonUp_GCY, buttonDown_GCY;
+	
+	public MyButton transcodeButton;
 	
 	public static LinkedList<TerrainMenu> terrainTypes = new LinkedList<TerrainMenu>();
 	public static LinkedList<GameGrid> gameGrid = new LinkedList<GameGrid>();
@@ -47,10 +50,14 @@ public class LevelMaker {
 		buttonUp_GCY = new ButtonUp_GCY((int) ((LevelMaker.gridCountX + 2) * Screen.gridSize), (int) (Screen.gridSize * 4), 25, 25);
 		buttonDown_GCY = new ButtonDown_GCY((int) ((LevelMaker.gridCountX + 2) * Screen.gridSize), (int) (Screen.gridSize * 5), 25, 25);
 
+		
+		// Transcode button
+		transcodeButton = new TranscodeButton((int) ((LevelMaker.gridCountX + 2) * Screen.gridSize), (int) Screen.gridSize*6, 60, 50);
+		
 		// Terrain menu
 		for (int i = 0; i < ((int) Math.ceil(Screen.terrain.size() / (double) terrainMenuColumnNum)); i++) {
 			for (int f = 0; f < terrainMenuColumnNum && terrainMenuColumnNum * i + f < Screen.terrain.size(); f++) {
-				terrainTypes.addLast(new TerrainMenu((int) ((LevelMaker.gridCountX + 2 + f) * Screen.gridSize), (int) (Screen.gridSize * (6 + i)), (int) Screen.gridSize, (int) Screen.gridSize, terrainMenuColumnNum * i + f));
+				terrainTypes.addLast(new TerrainMenu((int) ((LevelMaker.gridCountX + 2 + f) * Screen.gridSize), (int) (Screen.gridSize * (8 + i)), (int) Screen.gridSize, (int) Screen.gridSize, terrainMenuColumnNum * i + f));
 			}
 		}
 		
@@ -63,13 +70,8 @@ public class LevelMaker {
 		}
 	}
 	
-	//TODO Až bude level hotov, pøevedu ho do souboru.
-	public void transcodeLevel() {
-
-	}
-
 	/**
-	 * Po kliknutí projde všechny tlaèítka v LevelMakeru, aby zjistilo, které ylo kliknuto.
+	 * Po kliknutí projde všechny tlaèítka v LevelMakeru, aby zjistilo, které bylo kliknuto.
 	 */
 	public void isButtonClicked(MouseEvent e) {
 		// Terrain menu
@@ -91,13 +93,16 @@ public class LevelMaker {
 		buttonDown_GCX.clickButton(e);
 		buttonUp_GCY.clickButton(e);
 		buttonDown_GCY.clickButton(e);
+		
+		// Transcode button
+		transcodeButton.clickButton(e);
 	}
 	
 	public void drawTerrainMenu(Graphics g) {
 		for (int i = 0; i < ((int) Math.ceil(Screen.terrain.size() / (double) terrainMenuColumnNum)); i++) {
 			for (int f = 0; f < terrainMenuColumnNum && terrainMenuColumnNum * i + f < Screen.terrain.size(); f++) {
 				terrainTypes.get(terrainMenuColumnNum * i + f).x = (int) ((LevelMaker.gridCountX + 2 + f) * Screen.gridSize);
-				terrainTypes.get(terrainMenuColumnNum * i + f).y = (int) (Screen.gridSize * (6 + i));
+				terrainTypes.get(terrainMenuColumnNum * i + f).y = (int) (Screen.gridSize * (8 + i));
 				terrainTypes.get(terrainMenuColumnNum * i + f).width = (int) Screen.gridSize;
 				terrainTypes.get(terrainMenuColumnNum * i + f).height = (int) Screen.gridSize;
 				terrainTypes.get(terrainMenuColumnNum * i + f).drawButton(g);
@@ -105,7 +110,7 @@ public class LevelMaker {
 		}
 	}
 
-	public void drawGridCountButtons(Graphics g) {
+	public void drawButtons(Graphics g) {
 		// MyButton buttons
 		buttonUp_GCX.drawButton(g);
 		buttonDown_GCX.drawButton(g);
@@ -117,6 +122,8 @@ public class LevelMaker {
 		g.drawString(gridCountXStr + LevelMaker.gridCountX, buttonUp_GCX.x + 50, buttonUp_GCX.y + buttonUp_GCX.height / 2);
 		g.drawString(gridCountYStr + LevelMaker.gridCountY, buttonUp_GCY.x + 50, buttonUp_GCY.y + buttonUp_GCY.height / 2);
 
+		// Transcode button
+		transcodeButton.drawButton(g);
 	}
 	
 	public void drawGameGrid(Graphics g) {

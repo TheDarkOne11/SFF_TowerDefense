@@ -12,7 +12,6 @@ public abstract class MyButton {
 	public int height;
 
 	public Image texture;
-	protected String gridCountButtonTexturePath = "res/levelMaker/";
 	
 	protected MouseEvent mouseEvent;
 	
