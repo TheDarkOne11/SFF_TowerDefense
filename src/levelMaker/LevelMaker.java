@@ -21,8 +21,8 @@ import core.Screen;
 public class LevelMaker {
 	Screen screen;
 	int terrainMenuColumnNum = 4;
-	public static int gridCountX = Screen.gridCountX;
-	public static int gridCountY = Screen.gridCountY;
+	public static int gridCountX = 25;
+	public static int gridCountY = 15;
 	public static int lastGridCountX = gridCountX;
 	public static int lastGridCountY = gridCountY;
 

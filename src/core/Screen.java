@@ -40,8 +40,8 @@ public class Screen extends JPanel implements Runnable {
 	boolean running;
 
 	// Main Grid
-	public static int gridCountX = 25; // 25
-	public static int gridCountY = 15; // 15
+	public static int gridCountX;
+	public static int gridCountY;
 	/* Velikost x a y je stejná */
 	public static double gridSize = 1;
 
@@ -273,11 +273,11 @@ public class Screen extends JPanel implements Runnable {
 	 * @param levelName
 	 */
 	private void startGame(User user, String levelName) {
+		this.level = levelFile.getLevel(levelName);
+		this.level.FindSpawnPoint();
 		user.createPlayer();
 		map = new int[Screen.gridCountX][Screen.gridCountY];
 		towerMap = new Tower[gridCountX][gridCountY];
-		this.level = levelFile.getLevel(levelName);
-		this.level.FindSpawnPoint();
 		Screen.map = this.level.map;
 		this.enemyAI = new EnemyAI(this.level);
 
@@ -292,8 +292,8 @@ public class Screen extends JPanel implements Runnable {
 	private void startLevelMaker(User user) {
 		map = new int[100][100];
 		user.createPlayer();
-		double height = this.getHeight() / (Screen.gridCountY + Screen.shopGridCountY + 2);
-		double width = this.getWidth() / (Screen.gridCountX + 6);
+		double height = this.getHeight() / (LevelMaker.gridCountY + Screen.shopGridCountY + 2);
+		double width = this.getWidth() / (LevelMaker.gridCountX + 6);
 		Screen.gridSize = height < width ? height : width;
 
 		levelMaker = new LevelMaker(this);

@@ -26,6 +26,12 @@ public class LevelFile {
 		try {
 			levelFile = new FileInputStream(PathVar.levelPath + fileName + "/" + fileName + PathVar.levelExtension);
 			levelFile_Var = new FileInputStream(PathVar.levelPath + fileName + "/" + fileName + PathVar.levelVarExtension);
+			reader = new InputStreamReader(levelFile_Var);
+			scanner = new Scanner(reader);
+			
+			Screen.gridCountX = Integer.valueOf(scanner.next()).intValue();
+			Screen.gridCountY = Integer.valueOf(scanner.next()).intValue();
+			
 			reader = new InputStreamReader(levelFile);
 			scanner = new Scanner(reader);
 
