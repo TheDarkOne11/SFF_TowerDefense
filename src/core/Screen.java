@@ -70,7 +70,7 @@ public class Screen extends JPanel implements Runnable {
 	public static int[][] map;
 
 	// Uloženy všechny hodnoty pozic vìží
-	public Tower[][] towerMap = new Tower[25][15];
+	public Tower[][] towerMap;
 	public static LinkedList<Image> terrain = new LinkedList<Image>();
 
 	// Enemy
