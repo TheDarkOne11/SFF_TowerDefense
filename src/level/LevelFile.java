@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import lib.PathVar;
-
 import core.Screen;
 
 /**

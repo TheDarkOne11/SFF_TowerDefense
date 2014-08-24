@@ -23,7 +23,7 @@ public class EnemyMove {
 	public double distanceToCenter;
 
 	public boolean attack;
-	int health;
+	public int health;
 
 	public EnemyMove(Enemy enemy, SpawnPoint spawnPoint) {
 		this.enemy = enemy;

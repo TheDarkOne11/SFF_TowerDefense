@@ -3,10 +3,7 @@ package levelMaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import levelMaker.buttons.ButtonDown_GCX;
 import levelMaker.buttons.ButtonDown_GCY;
@@ -15,7 +12,6 @@ import levelMaker.buttons.ButtonUp_GCY;
 import levelMaker.buttons.TranscodeButton;
 import levelMaker.terrain.GameGrid;
 import levelMaker.terrain.TerrainMenu;
-import lib.PathVar;
 import core.Screen;
 
 public class LevelMaker {

@@ -28,7 +28,7 @@ import enemy.EnemyAI;
 import enemy.EnemyMove;
 import enemy.Wave;
 
-//TODO Epizoda 26
+//TODO Epizoda 30
 
 /** Hlavní tøída, která celou hru povede. */
 public class Screen extends JPanel implements Runnable {
@@ -70,7 +70,7 @@ public class Screen extends JPanel implements Runnable {
 	public static int[][] map;
 
 	// Uloženy všechny hodnoty pozic vìží
-	public Tower[][] towerMap;
+	public Tower[][] towerMap = new Tower[25][15];
 	public static LinkedList<Image> terrain = new LinkedList<Image>();
 
 	// Enemy
@@ -102,7 +102,8 @@ public class Screen extends JPanel implements Runnable {
 
 	public void paintComponent(Graphics g) {
 		g.clearRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
-
+		
+		//TODO Vytvoøit menu s tlaèítky. Implementovat naèítání a ukládání levelù pøi spuštìní.
 		if (gameState == 0) {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, this.frame.getWidth(), this.frame.getHeight());
@@ -277,7 +278,7 @@ public class Screen extends JPanel implements Runnable {
 		this.level.FindSpawnPoint();
 		user.createPlayer();
 		map = new int[Screen.gridCountX][Screen.gridCountY];
-		towerMap = new Tower[gridCountX][gridCountY];
+		this.towerMap = new Tower[Screen.gridCountX][Screen.gridCountY];
 		Screen.map = this.level.map;
 		this.enemyAI = new EnemyAI(this.level);
 
@@ -319,6 +320,7 @@ public class Screen extends JPanel implements Runnable {
 			sleepTime = nextGameTick - System.currentTimeMillis();
 
 			updateEnemy();
+			updateTower();
 
 			// Update každou vteøinu
 			if (System.currentTimeMillis() - 1000 >= lastFrame) {
@@ -337,30 +339,68 @@ public class Screen extends JPanel implements Runnable {
 		}
 		System.exit(0);
 	}
-
+	
 	/**
 	 * Update pohybu a spawnování nepøátel.
 	 */
-	public void updateEnemy() {
+	private void updateEnemy() {
 		// Moving
 		for (int i = 0; i < this.enemyMap.length; i++) {
 			if (this.enemyMap[i] != null) {
 				if (!this.enemyMap[i].attack) {
 					EnemyAI.enemyAIMove.move(enemyMap[i]);
 				}
-
-				enemyMap[i].update();
+	
+				enemyMap[i] = enemyMap[i].update();
 			}
 		}
-
+	
 		// Spawning
 		if (wave.isEnemySpawning) {
 			wave.spawnEnemies();
 		}
 	}
 
+	private void updateTower() {
+		for(int y = 0; y < Screen.gridCountY; y++) {
+			for(int x = 0; x < Screen.gridCountX; x++) {
+				if(this.towerMap[x][y] != null) {
+					towerAttack(x, y);
+				}
+			}
+		}
+	}
+	
+	/** Attacks enemy. */
+	public void towerAttack(int x, int y) {
+		if(this.towerMap[x][y].target == null) {
+			// Find target
+			if(this.towerMap[x][y].attackDelay >= this.towerMap[x][y].attackDelayMax) {
+				EnemyMove currentEnemy = this.towerMap[x][y].targetEnemyNew(this.towerMap[x][y].calculateEnemyNew(this.enemyMap, x, y));
+
+				if(currentEnemy != null) {
+					currentEnemy.health -= this.towerMap[x][y].damage;
+					
+					this.towerMap[x][y].target = currentEnemy;
+					this.towerMap[x][y].attackTime = 0;
+					this.towerMap[x][y].attackDelay = 0;
+					
+					System.out.println("[Screen] Tower Attacking.");
+				}
+			} else {
+				this.towerMap[x][y].attackDelay++;
+			}
+		} else {
+			if(this.towerMap[x][y].attackTime < this.towerMap[x][y].attackTimeMax) {
+				this.towerMap[x][y].attackTime++;
+			} else {
+				this.towerMap[x][y].target = null;
+			}
+		}
+	}
+
 	/**
-	 * Zaregistruje nepøítele.
+	 * Zaregistruje 1 nepøítele do enemyMap.
 	 */
 	public void spawnEnemy() {
 		for (int i = 0; i < this.enemyMap.length; i++) {
