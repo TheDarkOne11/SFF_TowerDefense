@@ -12,4 +12,5 @@ public class PathVar {
 	public static String levelPath = "level\\";
 	public static String levelExtension = ".level";
 	public static String levelVarExtension = "_Var" + PathVar.levelExtension;
+	public static String levelWaveExtension = "_Wave" + PathVar.levelExtension;
 }

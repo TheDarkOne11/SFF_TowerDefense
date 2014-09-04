@@ -26,16 +26,18 @@ public class Enemy {
 	public int damage;
 	public double speed;
 	public double attackSpeed;
+	public int points;	// How much is this enemy worth for spawning. Level must be <= to spawn.
 
-	public static final Enemy slime = new EnemySlime(EnemyVar.slimeId, EnemyVar.basicReward, EnemyVar.basicHealth, EnemyVar.basicDamage, EnemyVar.basicSpeed*2, EnemyVar.basicAttackSpeed).getTextureFile("EnemySlime");
-	//public static final Enemy strong = new EnemySlime(EnemyVar.strongId, EnemyVar.basicReward*2, EnemyVar.basicHealth*4, (int) (EnemyVar.basicDamage*1.5), EnemyVar.basicSpeed/2, EnemyVar.basicAttackSpeed/2).getTextureFile("EnemyStrong");
+	public static final Enemy slime = new EnemySlime(EnemyVar.slimeId, EnemyVar.basicPoint, EnemyVar.basicReward, EnemyVar.basicHealth, EnemyVar.basicDamage, EnemyVar.basicSpeed*2, EnemyVar.basicAttackSpeed).getTextureFile("EnemySlime");
+	public static final Enemy strong = new EnemySlime(EnemyVar.strongId, EnemyVar.basicPoint, EnemyVar.basicReward*2, EnemyVar.basicHealth*4, (int) (EnemyVar.basicDamage*1.5), EnemyVar.basicSpeed/2, EnemyVar.basicAttackSpeed/2).getTextureFile("EnemyStrong");
 
-	public Enemy(int id, int reward, int health, int damage, double speed, double attackSpeed) {
+	public Enemy(int id, int point, int reward, int health, int damage, double speed, double attackSpeed) {
 		if (enemyList[id] != null) {
 			System.out.println("[Enemy Initialization] Two enemies with same id.");
 		} else {
 			enemyList[id] = this;
 			this.id = id;
+			this.points = point;
 			this.reward = reward;
 			this.health = health;
 			this.damage = damage;

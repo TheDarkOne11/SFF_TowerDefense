@@ -28,7 +28,7 @@ import enemy.EnemyAI;
 import enemy.EnemyMove;
 import enemy.Wave;
 
-//TODO Epizoda 30
+//TODO Epizoda 31
 
 /** Hlavní tøída, která celou hru povede. */
 public class Screen extends JPanel implements Runnable {
@@ -90,7 +90,7 @@ public class Screen extends JPanel implements Runnable {
 	public int gameState;
 
 	/** Account */
-	private User user;
+	public static User user;
 
 	public Screen(FrameClass frame) {
 		thread.start(); // Zaène run()
@@ -437,10 +437,10 @@ public class Screen extends JPanel implements Runnable {
 	/**
 	 * Zaregistruje 1 nepøítele do enemyMap.
 	 */
-	public void spawnEnemy() {
+	public void spawnEnemy(int enemyId) {
 		for (int i = 0; i < this.enemyMap.length; i++) {
 			if (this.enemyMap[i] == null) {
-				this.enemyMap[i] = new EnemyMove(Enemy.enemyList[0], level.spawnPoint);
+				this.enemyMap[i] = new EnemyMove(Enemy.enemyList[enemyId], level.spawnPoint);
 				break;
 			}
 		}

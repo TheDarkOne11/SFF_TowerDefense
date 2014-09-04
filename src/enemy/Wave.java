@@ -1,18 +1,20 @@
 package enemy;
 
+import java.util.Random;
+
 import core.Screen;
 
 /** Spawnování nepøátel, zaèátek vln. */
 public class Wave {
 	Screen screen;
 	public int waveNumber = 0;
-	public int enemiesThisRound = 0;
-	public int enemiesPerRound = 10;
+	public int pointsThisRound = 10;
 	public boolean isEnemySpawning;
 	public int currentDelay = 0;
 	public int spawnRate = 1000;
 
 	public int enemyCount;
+	public int currPoints;
 
 	public Wave(Screen screen) {
 		this.screen = screen;
@@ -25,7 +27,8 @@ public class Wave {
 	public void nextWave() {
 		if (screen.gameState == 1) {
 			this.waveNumber++;
-			this.enemiesThisRound = 0;
+			this.pointsThisRound = this.waveNumber*10;
+			this.currPoints = 0;
 			isEnemySpawning = true;
 
 			System.out.println("[Wave] " + waveNumber + ". wave spawning.");
@@ -40,7 +43,7 @@ public class Wave {
 	 * Zaène spawnovat jednotlivé nepøátele
 	 */
 	public void spawnEnemies() {
-		if (this.enemiesThisRound < waveNumber * this.enemiesPerRound) {
+		if (currPoints < this.pointsThisRound) {
 			if (this.currentDelay < this.spawnRate) {
 				this.currentDelay++;
 			} else {
@@ -48,8 +51,20 @@ public class Wave {
 
 				System.out.println("[Wave] " + (++enemyCount) + ". enemy spawned.");
 
-				this.enemiesThisRound++;
-				this.screen.spawnEnemy();
+				int[] enemiesSpawnableId = new int[Enemy.enemyList.length];
+				int enemiesSpawnableSoFar = 0;
+				
+				for(int i = 0; i < Enemy.enemyList.length; i++) {
+					if(Enemy.enemyList[i] != null) {
+						if(Enemy.enemyList[i].points + currPoints <= this.pointsThisRound && Enemy.enemyList[i].points <= this.pointsThisRound) {
+							enemiesSpawnableId[enemiesSpawnableSoFar] = Enemy.enemyList[i].id;
+							enemiesSpawnableSoFar++;
+						}
+					}
+				}
+				int enemyId = new Random().nextInt(enemiesSpawnableSoFar);
+				this.currPoints += Enemy.enemyList[enemyId].points;
+				this.screen.spawnEnemy(enemiesSpawnableId[enemyId]);
 			}
 		}
 	}

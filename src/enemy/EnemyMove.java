@@ -39,6 +39,7 @@ public class EnemyMove {
 		EnemyMove currentEnemy = this;
 
 		if (currentEnemy.health <= 0) {
+			Screen.user.player.money += currentEnemy.enemy.reward;
 			return null;
 		}
 
