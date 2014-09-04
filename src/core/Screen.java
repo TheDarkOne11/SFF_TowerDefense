@@ -135,6 +135,12 @@ public class Screen extends JPanel implements Runnable {
 						g.setColor(new Color(64, 64, 64, 64));
 						g.fillOval(centerX, centerY, towerMap[x][y].range * 2 * (int) gridSize + (int) gridSize, towerMap[x][y].range * 2 * (int) gridSize + (int) gridSize);
 						g.drawImage(Tower.towerList[towerMap[x][y].id].texture, (int) gridSize + x * (int) gridSize, (int) gridSize + y * (int) gridSize, (int) gridSize, (int) gridSize, null);
+					
+						// Tower attack
+						if(towerMap[x][y].target != null) {
+							g.setColor(Color.RED);
+							g.drawLine((int) (x*Screen.gridSize + 3*Screen.gridSize/2), (int) (y*Screen.gridSize + 3*Screen.gridSize/2), (int) (towerMap[x][y].target.xPos + 3*Screen.gridSize/2), (int) (towerMap[x][y].target.yPos + 3*Screen.gridSize/2));
+						}
 					}
 				}
 			}
@@ -393,7 +399,7 @@ public class Screen extends JPanel implements Runnable {
 					this.towerMap[x][y].attackTime = 0;
 					this.towerMap[x][y].attackDelay = 0;
 					
-					System.out.println("[Screen] Tower Attacking.");
+					//System.out.println("[Screen] Tower Attacking.");
 				}
 			} else {
 				this.towerMap[x][y].attackDelay++;
