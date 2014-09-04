@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 
 import lib.PathVar;
 import lib.TowerVar;
-import tower.types.TowerLightning;
+import tower.types.LightningTower;
 import core.Screen;
 import enemy.EnemyMove;
 
@@ -23,19 +23,20 @@ public class Tower implements Cloneable {
 	public int damage;
 	
 	public EnemyMove target;
-	public int attackTime = 0;	//(timer) How long does attack last. (laser lasts more than missile)
-	public int attackDelay = 0;	//(timer) Time between attacks.
-	public int attackTimeMax;
-	public int attackDelayMax;
+	public double attackTime = 0;	//(timer) How long does attack last. (laser lasts more than missile)
+	public double attackDelay = 0;	//(timer) Time between attacks.
+	public double attackTimeMax;
+	public double attackDelayMax;
 	
 	/** Whether attack an enemy closest to Base, the strongest etc. */
 	public int attackStrategy;
 	public int RANDOM = 0;
 	public int CLOSEST = 1;
 
-	public static final Tower lightningTower = new TowerLightning(TowerVar.TowerLightningId, TowerVar.basicCost, TowerVar.basicRange, TowerVar.basicDamage, TowerVar.basicAttackTimeMax, TowerVar.basicDelayTimeMax).getTextureFile("LightningTower");
+	public static final Tower lightningTower = new LightningTower(TowerVar.TowerLightningId, TowerVar.basicCost, TowerVar.basicRange, TowerVar.basicDamage, TowerVar.basicAttackTimeMax, TowerVar.basicDelayTimeMax).getTextureFile("LightningTower");
+	public static final Tower darkTower = new LightningTower(TowerVar.TowerDarkId, (int) (TowerVar.basicCost*1.5), TowerVar.basicRange+1, TowerVar.basicDamage*3/2, TowerVar.basicAttackTimeMax, TowerVar.basicDelayTimeMax*1.5).getTextureFile("DarkTower");
 
-	public Tower(int id, int cost, int range, int damage, int attackTimeMax, int delayTimeMax) {
+	public Tower(int id, int cost, int range, int damage, double attackTimeMax, double delayTimeMax) {
 		if (towerList[id] != null) {
 			System.out.println("[TowerInitialization] Two towers with same id: " + id);
 		} else {

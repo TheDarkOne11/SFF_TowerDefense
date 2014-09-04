@@ -11,5 +11,6 @@ public class EnemyVar {
 	public static double basicAttackSpeed = 4;
 
 	public static int slimeId = 0;
+	public static int strongId = 1;
 
 }
