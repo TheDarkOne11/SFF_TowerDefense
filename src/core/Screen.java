@@ -364,8 +364,16 @@ public class Screen extends JPanel implements Runnable {
 	private void updateTower() {
 		for(int y = 0; y < Screen.gridCountY; y++) {
 			for(int x = 0; x < Screen.gridCountX; x++) {
-				if(this.towerMap[x][y] != null) {
-					towerAttack(x, y);
+				try {
+					if(this.towerMap[x][y] != null) {
+						towerAttack(x, y);
+					}
+				
+				// Poøád mi vyhazovalo vyjímku, pokud jsem v konstruktoru v Tower pøetypoval AttackTimeMax a DelayTimeMax
+				// na double. Toto to vyøešilo, ale vyjímka se stále vyhazuje.
+				} catch(NullPointerException e) {
+					System.err.println("[Screen.updateTower] NullPointerException in towerMap " +
+										"after changing Tower constructor. ");
 				}
 			}
 		}
@@ -400,18 +408,6 @@ public class Screen extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Zaregistruje 1 nepøítele do enemyMap.
-	 */
-	public void spawnEnemy() {
-		for (int i = 0; i < this.enemyMap.length; i++) {
-			if (this.enemyMap[i] == null) {
-				this.enemyMap[i] = new EnemyMove(Enemy.enemyList[0], level.spawnPoint);
-				break;
-			}
-		}
-	}
-
-	/**
 	 * Položení vìže po nákupu.
 	 * 
 	 * @param x
@@ -432,6 +428,18 @@ public class Screen extends JPanel implements Runnable {
 		}
 	}
 
+	/**
+	 * Zaregistruje 1 nepøítele do enemyMap.
+	 */
+	public void spawnEnemy() {
+		for (int i = 0; i < this.enemyMap.length; i++) {
+			if (this.enemyMap[i] == null) {
+				this.enemyMap[i] = new EnemyMove(Enemy.enemyList[0], level.spawnPoint);
+				break;
+			}
+		}
+	}
+
 	public class MouseHeld {
 		boolean mouseDown;
 
@@ -447,10 +455,11 @@ public class Screen extends JPanel implements Runnable {
 					if (e.getXOnScreen() >= shopGridStartX && e.getXOnScreen() <= shopGridStartX * (1 + gridSize)) {
 						// Jestli je myš umístìna nìkdy v shopu_Pozice X
 						if (e.getYOnScreen() >= shopGridStartY && e.getYOnScreen() <= shopGridStartY * (1 + gridSize)) {
-							// Tower 1
-							if (e.getXOnScreen() >= shopGridStartX && e.getXOnScreen() <= shopGridStartX + gridSize && e.getYOnScreen() >= shopGridStartY && e.getYOnScreen() <= shopGridStartY + gridSize) {
-								if (user.player.money >= Tower.towerList[0].cost) {
-									handTower = 1;
+							for(int i = 0; i < Tower.towerList.length; i++) {
+								if (e.getXOnScreen() >= shopGridStartX + (int) (i/2)*gridSize && e.getXOnScreen() <= shopGridStartX + gridSize + (int) (i/2)*gridSize && e.getYOnScreen() >= shopGridStartY + (int) (i%2)*gridSize && e.getYOnScreen() <= shopGridStartY + gridSize + (int) (i%2)*gridSize) {
+									if (user.player.money >= Tower.towerList[0].cost) {
+										handTower = i+1;
+									}
 								}
 							}
 						}
