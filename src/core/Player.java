@@ -8,8 +8,8 @@ package core;
  */
 public class Player {
 
-	public int health;
-	public int money;
+	int health;
+	int money;
 
 	public Player(User user) {
 		this.health = user.startingHealth;

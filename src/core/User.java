@@ -8,7 +8,7 @@ package core;
  */
 public class User {
 	private Screen screen;
-	public Player player;
+	Player player;
 	int startingMoney = 300;
 	int startingHealth = 100;
 
